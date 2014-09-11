@@ -15,8 +15,8 @@ require.config({
   }
 });
 
-require(["backbone", "mycollection"],
-function(Backbone, MyCollection) {
+require(["backbone", "collectionviewproxy"],
+function(Backbone, CollectionViewProxy) {
 
 	var watch=function(collection) {
 		var added=[];
@@ -48,32 +48,40 @@ function(Backbone, MyCollection) {
 		};
 
 		this.verify=function(options) {
+			var safeAt = function(collection, index) {
+				return index<collection.length ? collection.at(index) : {};
+			};
+
+			var safeArray = function(array, index) {
+				return index<array.length ? array[index] : {};
+			};
+
+			if(options.position!=undefined) {
+				equal(collection.position, options.position, "collection.position="+options.position);
+			}
 			if(options.id) {
 				equal(collection.length, options.id.length, "Check collection length " + options.id.length);
 				_.each(options.id, function(id, index) {
-					equal(collection.at(index).id, id, "collection["+index+"]="+id);
+					equal(safeAt(collection, index).id, id, "collection["+index+"]="+id);
 				}, this);
 			}
 			if(options.sourceid) {
 				equal(collection.collection.length, options.sourceid.length, "Check backing collection length " + options.id.length);
 				_.each(options.sourceid, function(id, index) {
-					equal(collection.collection.at(index).id, id, "collection["+index+"]="+id);
+					equal(safeAt(collection.collection, index).id, id, "collection["+index+"]="+id);
 				}, this);				
-			}
-			if(options.position!=undefined) {
-				equal(collection.position, options.position, "collection.position="+options.position);
 			}
 			if(options.added) {
 				equal(added.length, options.added.length, "Added length " + options.added.length);
 				_.each(options.added, function(id, index) {
-					equal(id, added[index].id)
+					equal(id, safeArray(added, index).id);
 				}, this);				
 			}
 			added=[];
 			if(options.removed) {
 				equal(removed.length, options.removed.length, "Removed length " + options.removed.length);
 				_.each(options.removed, function(id, index) {
-					equal(id, removed[index].id)
+					equal(id, safeArray(removed, index).id);
 				}, this);				
 			}
 			removed=[];
@@ -88,15 +96,15 @@ function(Backbone, MyCollection) {
 	};
 
 	test("Class defaults", function() {
-		var collection=new MyCollection(new Backbone.Collection());
-		ok(collection instanceof MyCollection);
+		var collection=new CollectionViewProxy(new Backbone.Collection());
+		ok(collection instanceof CollectionViewProxy);
 		ok(collection instanceof Backbone.Collection);
 		equal(collection.options.count, 10);
 	});
 
 	test("Constructor", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5});
+		var collection = new CollectionViewProxy(source, {count: 5});
 		var w=new watch(collection);
 		w.verify({id: [0, 1, 2, 3, 4]});
 		w.finalize();
@@ -104,7 +112,7 @@ function(Backbone, MyCollection) {
 
 	test("Constructor offset", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5, offset: -2});
+		var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
 		var w = new watch(collection);
 		w.verify({id: [8, 9, 0, 1, 2]});
 		w.finalize();
@@ -113,7 +121,7 @@ function(Backbone, MyCollection) {
 
 	test("Update position", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5, offset: -2});
+		var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
 		var w = new watch(collection);
 		w.verify({id: [8, 9, 0, 1, 2], position: 0});
 		collection.position = 1;
@@ -123,7 +131,7 @@ function(Backbone, MyCollection) {
 
 	test("Upadte position negative", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5, offset: -2});
+		var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
 		var w = new watch(collection);
 		w.verify({id: [8, 9, 0, 1, 2], position: 0});
 		collection.position = -1;
@@ -133,7 +141,7 @@ function(Backbone, MyCollection) {
 
 	test("Reset", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5, offset: -2});
+		var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
 		var w=new watch(collection);
 		w.verify({id: [8, 9, 0, 1, 2]});
 		collection.reset(_(10).times(function(n) {return {"id": 100+n}; }))
@@ -143,7 +151,7 @@ function(Backbone, MyCollection) {
 
 	test("Add out of window", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5});
+		var collection = new CollectionViewProxy(source, {count: 5});
 		var w = new watch(collection);
 		collection.add([{id: 10}]);
 		w.verify({id: [0, 1, 2, 3, 4], added: [], removed: [],
@@ -153,7 +161,7 @@ function(Backbone, MyCollection) {
 
 	test("Add in window", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5, offset: -2});
+		var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
 		var w=new watch(collection);
 		collection.add([{id: 10}]);
 		w.verify({id: [9, 10, 0, 1, 2],added: [10], removed: [8],
@@ -163,7 +171,7 @@ function(Backbone, MyCollection) {
 
 	test("Remove out of window", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5});
+		var collection = new CollectionViewProxy(source, {count: 5});
 		var w = new watch(collection);
 		collection.remove(source.at(8));
 		w.verify({id: [0, 1, 2, 3, 4], added: [], removed: [],
@@ -173,7 +181,7 @@ function(Backbone, MyCollection) {
 
 	test("Remove in window", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5});
+		var collection = new CollectionViewProxy(source, {count: 5});
 		var w = new watch(collection);
 		collection.remove(source.at(2));
 		w.verify({id: [0, 1, 3, 4, 5], added: [5], removed: [2],
@@ -183,7 +191,7 @@ function(Backbone, MyCollection) {
 
 	test("increasing position", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5});
+		var collection = new CollectionViewProxy(source, {count: 5});
 		var w = new watch(collection);
 		w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [], removed: []});
 		collection.position=0.3;
@@ -197,7 +205,7 @@ function(Backbone, MyCollection) {
 
 	test("decreasing position", function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		var collection = new MyCollection(source, {count: 5});
+		var collection = new CollectionViewProxy(source, {count: 5});
 		var w = new watch(collection);
 		w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [], removed: []});
 		collection.position=-0.3;
@@ -206,6 +214,55 @@ function(Backbone, MyCollection) {
 		w.verify({id: [9, 0, 1, 2, 3, 4], position: -0.7, added: [], removed: []});
 		collection.position=-1;
 		w.verify({id: [9, 0, 1, 2, 3], position: -1, added: [], removed: [4]});
+		w.finalize();
+	});
+
+
+	test("short collection", function() {
+		var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
+		var collection = new CollectionViewProxy(source, {count: 5});
+		var w = new watch(collection);
+		w.verify({id: [0, 1, 2], position: 0, added: [], removed: []});
+		w.finalize();
+	});
+
+	test("short collection offset", function() {
+		var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
+		var collection = new CollectionViewProxy(source, {count: 5, offset: -1});
+		var w = new watch(collection);
+		w.verify({id: [2, 0, 1], position: 0, added: [], removed: []});
+		w.finalize();
+	});
+
+	test("short collection position", function() {
+		var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
+		var collection = new CollectionViewProxy(source, {count: 5});
+		var w = new watch(collection);
+		w.verify({id: [0, 1, 2], position: 0, added: [], removed: []});
+		collection.position=0.5;
+		w.verify({id: [0, 1, 2, "clone_0"], position: 0.5, added: ["clone_0"], removed: []});
+		collection.position=0.9;
+		w.verify({id: [0, 1, 2, "clone_0"], position: 0.9, added: [], removed: []});
+		collection.position=1;
+		w.verify({id: [1, 2, 0], position: 1, added: [], removed: ["clone_0"]});
+		w.finalize();
+	});
+
+	test("remove less than 'count'", function() {
+		var source = new Backbone.Collection(_(5).times(function(n) {return {"id": n}; }));
+		var collection = new CollectionViewProxy(source, {count: 5});
+		var w = new watch(collection);
+		w.verify({id: [0, 1, 2, 3, 4], positoin: 0, added: [], removed: []});
+		source.pop();
+		w.verify({id: [0, 1, 2, 3], position: 0, added: [], removed: [4]});
+		source.pop();
+		w.verify({id: [0, 1, 2], position: 0, added: [], removed: [3]});
+		source.pop();
+		w.verify({id: [0, 1], position: 0, added: [], removed: [2]});
+		source.pop();
+		w.verify({id: [0], position: 0, added: [], removed: [1]});
+		source.pop();
+		w.verify({id: [], position: 0, added: [], removed: [0]});
 		w.finalize();
 	});
 });

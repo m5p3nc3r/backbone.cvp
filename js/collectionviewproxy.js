@@ -1,5 +1,7 @@
 define(['backbone', 'underscore'], function(Backbone, _) {
 
+	"use strict";
+
 	var DefaultOptions = {
 		count: 10,
 		offset: 0,
@@ -16,7 +18,7 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 
 			// Validate input arguments
 			if(!(collection instanceof Backbone.Collection)) {
-				throw("Poo");
+				throw("Invalid argument: expected Backbone.Collection");
 			}
 
 			this.options=_.extend({}, DefaultOptions, args[1]);
@@ -26,14 +28,7 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 			return ret;
 		},
 
-		getPosition: function() {
-			return this._position;
-		},
-
 		setPosition: function(position) {
-			var start=Math.floor(position+this.options.offset);
-			var end=Math.ceil(position+this.options.offset+this.options.count);
-			var models;
 
 			var normailze=function(x,length) {
 				x=x%length;
@@ -41,34 +36,52 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 				return x;
 			}
 
-			start=normailze(start,this.collection.length);
-			end=normailze(end,this.collection.length);
+			var count=Math.min(this.options.count, this.collection.length);
+			var pos=normailze(Math.floor(position+this.options.offset),this.collection.length);
+			var models=[];
 
-			if(start<end) {
-				models=this.collection.slice(start, end);
-			} else {
-				var last=this.collection.models.slice(0, end);
-				models=this.collection.models.slice(start);
-				_.each(last, function(model) {
-					models.push(model);
-				});
+			// Check the condition where we don't need a clone (length<count),
+			// but need count+1 items (positoin%1!=0)
+			if(position%1!=0 && this.collection.length>this.options.count) count+=1;
+			while(count) {
+				models.push(this.collection.at(pos));
+				pos++;
+				if(pos>=this.collection.length) pos=0;
+				count--;
+			}
+
+			// Check to see if a clone is needed
+			if(this.collection.length<=this.options.count && position%1!=0) {
+				models.push(this._createClone(models[0]));
 			}
 
 			this._position=position;
 
-			Backbone.Collection.prototype.set.call(this,models, {proxy: false});
+			Backbone.Collection.prototype.set.call(this,models, {proxy: false, merge: false});
 
 			this.trigger("position", position);
+		},
 
+		_createClone: function(model) {
+			var clone_id="clone_"+model.id;
+			var clone=this.find(function(search) { return search.id===clone_id;});
+			if(clone===undefined) {
+				clone=model.clone();
+				clone.id="clone_"+clone.id;
+			}
+			return clone;
 		},
 
 		_onAdd: function(model, collection, options) {
+			// Reset the position - this will cause add/remove to be called as necessary
 			this.position=this.position;
 		},
 		_onRemove: function(model, collection, options) {
+			// Reset the position - this will cause add/remove to be called as necessary
 			this.position=this.position;
 		},
 		_onReset: function(collection, options) {
+			// Check to see if the collection has changed
 			if(this.collection !== collection) {
 				if(this.collection) {
 					// Remove all registered handlers
@@ -84,6 +97,7 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 					.on('reset', this._onReset, this);
 			}
 
+			// Reset the position to the default
 			this._position=this.options.position;
 
 			var models;
@@ -101,6 +115,8 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 		}
 	});
 
+	// Override specific functions of Backbone.Collection, pass the call on to the underlying collection
+	// so that we process the call properly
 	var methods=["add", "remove", "reset"];
 	_.each(methods, function(method) {
 		CollectionViewProxy.prototype[method] = function() {
@@ -110,8 +126,10 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 		}
 	});
 
+	// Create an 'position' property that can be used to set/get the position of the collection
+
 	Object.defineProperty(CollectionViewProxy.prototype, "position", {
-		get: function() { return this.getPosition(); },
+		get: function() { return this._position; },
 		set: function(v) { this.setPosition(v)}
 	});
 

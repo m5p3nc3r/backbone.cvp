@@ -19,38 +19,10 @@ require.config({
   }
 });
 
-// shim layer with setTimeout fallback
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
-})();
-
-var Cache=function(options) {
-	this.cache=[];
-	this.options=options;
-}
-Cache.prototype.push = function(item) {
-	this.cache.push(item);
-}
-Cache.prototype.pop = function() {
-	var item=this.cache.pop();
-	if(item===undefined) {
-		item=this.options.miss.apply(this, arguments);
-	} else {
-		var args=[].slice.call(arguments);
-		args.unshift(item);
-		this.options.hit.apply(this, args);
-	}
-	return item;
-}
-
-require(["backbone", "underscore", "mycollection"], function(Backbone, _, CollectionViewProxy) {
+require(["backbone", "underscore", "collectionviewproxy", "cache", "animate", "easing"],
+function(Backbone, _, CollectionViewProxy, Cache, Animate, Easing) {
 	var MyItemView = Backbone.View.extend({
-		tagName: "li",
+		tagName: "div",
 		className: "item",
 
 		initialize: function() {
@@ -70,7 +42,7 @@ require(["backbone", "underscore", "mycollection"], function(Backbone, _, Collec
 		},
 
 		show: function() {
-			this.$el.css("opacity", 0.9999);
+			this.$el.css("opacity", 1);//0.9999);
 		},
 
 		hide: function() {
@@ -80,18 +52,18 @@ require(["backbone", "underscore", "mycollection"], function(Backbone, _, Collec
 	});
 
 	var MyListView = Backbone.View.extend({
-		tagName: "ul",
+		tagName: "div",
 		className: "list",
 
 		initialize: function() {
 			this.collection.on("position", this.layout, this);
 			this.collection.on("add", this.onAdd, this);
 			this.collection.on("remove", this.onRemove, this);
+			// Simple view cache - used to reduce the amount of DOM thrashing during animation
 			this.cache=new Cache({
 				miss: _.bind(function(model) {
 					var view=new MyItemView({model: model});
 					this.$el.append(view.render().el);
-//					model.view=view;
 					return view;
 				}, this),
 				hit: _.bind(function(view, model) {
@@ -133,44 +105,56 @@ require(["backbone", "underscore", "mycollection"], function(Backbone, _, Collec
 		},
 		layout: function() {
 			var delta=this.collection.position%1;
+			var length=this.collection.length;
 			if(delta<0) delta+=1;
 			this.collection.each(function(model, index) {
-				model.view.$el.css('transform', 'translate3D('+(index-delta)*100+'%,0,0');
+				var alpha=1;
+				if(index==0) alpha=1-delta;
+				if(index==length-1 && delta!=0) alpha=delta;
+				model.view.$el.css('transform', 'translate3D('+Math.round((index-delta)*100)+'%,0,0');
+				model.view.$el.css('opacity', alpha);
 			});
 		}
 	});
 	
-
 	var Controller = function() {
 		var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
-		window.source=source;
 		var collection = new CollectionViewProxy(source, {count: 5});
-		window.c=collection;
+		var animate = new Animate({
+			duration: 700,
+			// Give it a bit of a nicer easing curve
+			easing: Easing.easeOutQuad,
+			// Step function called on every step of the animation
+			step: _.bind(function(value) {
+				collection.position=value;
+			}, this)
+		});
 		// Construct a list view with the collectionView proxy
-		var listView=new MyListView({collection: collection});
-		window.v=listView;
-		$('body').append(listView.render().el);
+		var view=new MyListView({collection: collection});
+		$('body').append(view.render().el);
+		var targetPosition=collection.position;
 
 		$('body').on('keydown', function(event) {
+			var preventDefault=true;
 			switch(event.keyCode) {
 				case 37: // Left
-					collection.position=collection._position-0.1;
-					event.preventDefault();
+					animate.stop().start({from: collection.position, to: targetPosition-=1});
 					break;
-				case 39: // Roght
-					collection.position=collection._position+0.1;
-					event.preventDefault();
+				case 39: // Right
+					animate.stop().start({from: collection.position, to: targetPosition+=1});
 					break;
 				case 38: // Up
+					source.add({id: source.length})
+					break;
 				case 40: // Down
+					source.pop();
+					break;
+				default:
+					preventDefault=false;
 					break;
 			}
+			if(preventDefault) event.preventDefault();
 		});
-
-		(function animationLoop() {
-			window.requestAnimFrame(animationLoop);
-			collection.position=collection.position+0.01;
-		})();
 	}
 
 	var c=new Controller();
