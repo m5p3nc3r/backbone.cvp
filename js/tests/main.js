@@ -137,6 +137,7 @@ function(Backbone, _, CollectionViewProxy, Cache, Animate, Easing, Touch) {
 		var touch=new Touch({
 			target: view,
 			onStart: function(t) {
+				animate.stop();
 				t.itemWidth=view.collection.at(0).view.$el.outerWidth();
 			},
 			onMove: function(t) {
