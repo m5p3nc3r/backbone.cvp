@@ -144,7 +144,7 @@ function(Backbone, _, CollectionViewProxy, Cache, Animate, Easing, Touch) {
 				collection.position -= (t.delta.x/t.itemWidth);
 			},
 			onEnd: function(t) {
-				targetPosition=Math.round(collection.position);
+				targetPosition=Math.round(collection.position - (t.speed/t.itemWidth)*1000);
 				animate.stop().start({from: collection.position, to: targetPosition});
 			}
 		});
