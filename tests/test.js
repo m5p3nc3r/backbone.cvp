@@ -2,7 +2,9 @@ require.config({
   baseUrl: "../js",
   paths: {
   	"backbone": "libs/backbone/backbone-1.1.0",
-  	"underscore": "libs/underscore/underscore"
+  	"underscore": "libs/underscore/underscore",
+  	"jquery" : "libs/jquery/jquery-2.0.3",
+  	"mockjax": "libs/jquery/jquery.mockjax",
   },
   shim: {
   	"backbone": {
@@ -11,12 +13,18 @@ require.config({
   	},
   	"underscore": {
   		exports: "_"
+  	},
+  	"jquery": {
+  		exports: "$"
+  	},
+  	"mockjax": {
+  		deps: ["jquery"]
   	}
   }
 });
 
-require(["backbone", "collectionviewproxy"],
-function(Backbone, CollectionViewProxy) {
+require(["jquery", "backbone", "collectionviewproxy", "mockjax"],
+function($, Backbone, CollectionViewProxy) {
 
 	var watch=function(collection) {
 		var added=[];
@@ -265,4 +273,56 @@ function(Backbone, CollectionViewProxy) {
 		w.verify({id: [], position: 0, added: [], removed: [0]});
 		w.finalize();
 	});
+
+	module("CollectionViewProxy remote collection", {
+		setup: function(assert) {
+			$.mockjax({
+				url: /^\/data\/start\/([\d]+)\/count\/([\d]+)$/,
+				responseTime: 0,
+				urlParams: ['start', 'count'],
+				contentType: 'text/json',
+				response: function(settings) {
+					var start=Number.parseInt(settings.urlParams.start);
+					this.responseText=_(settings.urlParams.count).times(
+						function(n) {return {"id": start+n}}
+					);
+				}
+			});
+		},
+		teardown: function(assert) {
+
+		}
+	});
+
+	var TestCollection = Backbone.Collection.extend({
+		url: function() {
+			return "/data/start/0/count/5";
+		}
+	});
+
+	asyncTest("remove less than 'count'", function() {
+		var source = new TestCollection();
+		var collection = new CollectionViewProxy(source, {count: 5});
+		var w = new watch(collection);
+		source.fetch().then(
+			function() {
+				start();
+				w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [0, 1, 2, 3, 4], removed: []});
+				source.pop();
+				w.verify({id: [0, 1, 2, 3], position: 0, added: [], removed: [4]});
+				source.pop();
+				w.verify({id: [0, 1, 2], position: 0, added: [], removed: [3]});
+				source.pop();
+				w.verify({id: [0, 1], position: 0, added: [], removed: [2]});
+				source.pop();
+				w.verify({id: [0], position: 0, added: [], removed: [1]});
+				source.pop();
+				w.verify({id: [], position: 0, added: [], removed: [0]});
+				w.finalize();
+			},
+			function() {
+				console.log("Error reading source");
+			});
+	});
+
 });
