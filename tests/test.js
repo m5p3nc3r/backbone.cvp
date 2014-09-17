@@ -1,3 +1,5 @@
+"use strict";
+
 require.config({
   baseUrl: "../js",
   paths: {
@@ -274,16 +276,31 @@ function($, Backbone, CollectionViewProxy) {
 		w.finalize();
 	});
 
+
+	var getURLArgs=function(uri) {
+		var ret={};
+    	var parts=uri.split('?');
+    	if(parts.length>1) {
+    		var args=parts[1].split('&');
+    		_.each(args, function(arg) {
+    			var pair=arg.split('=');
+    			ret[pair[0]]=pair.length>1 ? pair[1] : undefined;
+    		});
+    	}
+    	return ret;
+    };	
+
 	module("CollectionViewProxy remote collection", {
-		setup: function(assert) {
+
+		setup: function(assert) {			
 			$.mockjax({
-				url: /^\/data\/start\/([\d]+)\/count\/([\d]+)$/,
+				url: /^\/data\?*/,
 				responseTime: 0,
-				urlParams: ['start', 'count'],
 				contentType: 'text/json',
-				response: function(settings) {
-					var start=Number.parseInt(settings.urlParams.start);
-					this.responseText=_(settings.urlParams.count).times(
+				response: function(request) {
+					var args=getURLArgs(request.url);
+					var start=Number.parseInt(args.start);
+					this.responseText=_(args.count).times(
 						function(n) {return {"id": start+n}}
 					);
 				}
@@ -296,7 +313,7 @@ function($, Backbone, CollectionViewProxy) {
 
 	var TestCollection = Backbone.Collection.extend({
 		url: function() {
-			return "/data/start/0/count/5";
+			return "/data?start=0&count=5";
 		}
 	});
 
