@@ -40,6 +40,7 @@ function(Backbone, _, CollectionViewProxy, Cache) {
 			this.collection.on("position", this.layout, this);
 			this.collection.on("add", this.onAdd, this);
 			this.collection.on("remove", this.onRemove, this);
+			this.collection.on("reset", this.onReset, this);
 			// Simple view cache - used to reduce the amount of DOM thrashing during animation
 			this.cache=new Cache({
 				miss: _.bind(function(model) {
@@ -49,7 +50,11 @@ function(Backbone, _, CollectionViewProxy, Cache) {
 				}, this),
 				hit: _.bind(function(view, model) {
 					view.setModel(model);
-				}, this)
+				}, this),
+				onPush: function(view) {
+					view.hide();
+					view.model.view=undefined;
+				}
 			});
 		},
 
@@ -77,12 +82,19 @@ function(Backbone, _, CollectionViewProxy, Cache) {
 		},
 		onRemove: function(model, collection, options) {
 			this.cache.push(model.view);
-			model.view.hide();
-			model.view=undefined;
 			var that=this;
 			_.defer(function() {
 				that.layout();
 			});
+		},
+		onReset: function(collection, options) {
+			_.each(options.previousModels, function(model) {
+				this.cache.push(model.view);
+			},this);
+			collection.each(function(model) {
+				this._add(model, collection);
+			}, this);
+			console.log("RESET");
 		},
 		layout: function() {
 			var delta=this.collection.position%1;
@@ -95,7 +107,18 @@ function(Backbone, _, CollectionViewProxy, Cache) {
 				model.view.$el.css('transform', 'translate3D('+Math.round((index-delta)*100)+'%,0,0');
 				model.view.$el.css('opacity', alpha);
 			});
-		}
+		},
+		show: function() {
+			this.$el.css("opacity", 1);
+		},
+
+		hide: function() {
+			this.$el.css("opacity", 0);
+		},
+		setModel: function(model) {
+			this.collection.reset(model);
+			this.collection.position=0;
+		},
 	});
 
 	return ListView
