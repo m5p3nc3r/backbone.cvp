@@ -44,8 +44,8 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 					return controller.view;
 				}, this),
 				hit: _.bind(function(view, model) {
-					var collection=_(10).times(function(n) {return {"id": model.id + " : " +n}; });
-					view.setModel(collection);
+					var models=_(10).times(function(n) {return {"id": model.id + " : " +n}; });
+					view.collection.reset(models);
 				}, this)
 			});
 		},
@@ -119,6 +119,10 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 		// Construct a list view with the collectionView proxy
 		var view=this.view=new config.view({collection: this.collection});
 		view.controller=this; // Not realy nice, but will do for now
+		collection.on('reset', function() {
+			animate.stop();
+			this.targetPosition=this.collection.position=0;
+		}, this);
 		config.parent.append(view.render().el);
 		this.targetPosition=this.collection.position;
 

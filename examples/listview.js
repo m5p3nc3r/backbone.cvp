@@ -1,6 +1,6 @@
 
-define(["backbone", "underscore", "collectionviewproxy", "cache"],
-function(Backbone, _, CollectionViewProxy, Cache) {
+define(["backbone", "underscore", "cache"],
+function(Backbone, _, Cache) {
 
 	var ItemView = Backbone.View.extend({
 		tagName: "div",
@@ -94,7 +94,6 @@ function(Backbone, _, CollectionViewProxy, Cache) {
 			collection.each(function(model) {
 				this._add(model, collection);
 			}, this);
-			console.log("RESET");
 		},
 		layout: function() {
 			var delta=this.collection.position%1;
@@ -114,10 +113,6 @@ function(Backbone, _, CollectionViewProxy, Cache) {
 
 		hide: function() {
 			this.$el.css("opacity", 0);
-		},
-		setModel: function(model) {
-			this.collection.reset(model);
-			this.collection.position=0;
 		},
 	});
 
