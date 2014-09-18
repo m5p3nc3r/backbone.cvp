@@ -49,7 +49,6 @@ define(['underscore'], function(_) {
 			if(t.delta.t>30) t.speed=0; // Zero the effective speed if the touch has been 'lingering'
 			this.options.onEnd(t);
 			this.currentTouches=_.filter(this.currentTouches,function(item) {return item.id!=touch.identifier});			
-			console.log(this.currentTouches.length);
 		}, this);
 	}
 

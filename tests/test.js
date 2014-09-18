@@ -1,8 +1,12 @@
+"use strict";
+
 require.config({
   baseUrl: "../js",
   paths: {
   	"backbone": "libs/backbone/backbone-1.1.0",
-  	"underscore": "libs/underscore/underscore"
+  	"underscore": "libs/underscore/underscore",
+  	"jquery" : "libs/jquery/jquery-2.0.3",
+  	"mockjax": "libs/jquery/jquery.mockjax",
   },
   shim: {
   	"backbone": {
@@ -11,12 +15,18 @@ require.config({
   	},
   	"underscore": {
   		exports: "_"
+  	},
+  	"jquery": {
+  		exports: "$"
+  	},
+  	"mockjax": {
+  		deps: ["jquery"]
   	}
   }
 });
 
-require(["backbone", "collectionviewproxy"],
-function(Backbone, CollectionViewProxy) {
+require(["jquery", "backbone", "collectionviewproxy", "mockjax"],
+function($, Backbone, CollectionViewProxy) {
 
 	var watch=function(collection) {
 		var added=[];
@@ -265,4 +275,71 @@ function(Backbone, CollectionViewProxy) {
 		w.verify({id: [], position: 0, added: [], removed: [0]});
 		w.finalize();
 	});
+
+
+	var getURLArgs=function(uri) {
+		var ret={};
+    	var parts=uri.split('?');
+    	if(parts.length>1) {
+    		var args=parts[1].split('&');
+    		_.each(args, function(arg) {
+    			var pair=arg.split('=');
+    			ret[pair[0]]=pair.length>1 ? pair[1] : undefined;
+    		});
+    	}
+    	return ret;
+    };	
+
+	module("CollectionViewProxy remote collection", {
+
+		setup: function(assert) {			
+			$.mockjax({
+				url: /^\/data\?*/,
+				responseTime: 0,
+				contentType: 'text/json',
+				response: function(request) {
+					var args=getURLArgs(request.url);
+					var start=Number.parseInt(args.start);
+					this.responseText=_(args.count).times(
+						function(n) {return {"id": start+n}}
+					);
+				}
+			});
+		},
+		teardown: function(assert) {
+
+		}
+	});
+
+	var TestCollection = Backbone.Collection.extend({
+		url: function() {
+			return "/data?start=0&count=5";
+		}
+	});
+
+	asyncTest("remove less than 'count'", function() {
+		var source = new TestCollection();
+		var collection = new CollectionViewProxy(source, {count: 5});
+		var w = new watch(collection);
+		source.fetch().then(
+			function() {
+				start();
+				w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [0, 1, 2, 3, 4], removed: []});
+				source.pop();
+				w.verify({id: [0, 1, 2, 3], position: 0, added: [], removed: [4]});
+				source.pop();
+				w.verify({id: [0, 1, 2], position: 0, added: [], removed: [3]});
+				source.pop();
+				w.verify({id: [0, 1], position: 0, added: [], removed: [2]});
+				source.pop();
+				w.verify({id: [0], position: 0, added: [], removed: [1]});
+				source.pop();
+				w.verify({id: [], position: 0, added: [], removed: [0]});
+				w.finalize();
+			},
+			function() {
+				console.log("Error reading source");
+			});
+	});
+
 });
