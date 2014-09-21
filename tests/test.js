@@ -414,4 +414,37 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 			stop();
 		});
 	});
+
+	asyncTest("Decreasing position", function() {
+		var collection = new TestPagedCollection({pagesize: 5});
+		var w=new watch(collection);
+		collection.position=0;
+		collection.current.then(function() {
+			start();
+			w.verify({id: [95, 96, 97, 98, 99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+				added: [95, 96, 97, 98, 99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+				removed: []});
+
+			collection.position=-1;
+			collection.current.then(function() {
+				start();
+				w.verify({position: -1, added: [90, 91, 92, 93, 94], removed: [5, 6, 7, 8, 9]});
+
+				collection.position=-4;
+				ok(!collection.current);
+
+				collection.position=-7;
+				collection.current.then(function() {
+					start();
+					w.verify({position: -7, added: [85, 86, 87, 88, 89], removed: [0, 1, 2, 3, 4]});
+
+					w.finalize();		
+				});
+				stop();
+			});
+
+			stop();
+		});
+
+	})
 });
