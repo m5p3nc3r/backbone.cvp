@@ -328,7 +328,7 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 
 	module("PagedCollection", {
 		setup: function(assert) {			
-			$.mockjax({
+			this.mockId=$.mockjax({
 				url: /^\/data\?*/,
 				responseTime: 0,
 				contentType: 'text/json',
@@ -350,7 +350,7 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 			});
 		},
 		teardown: function(assert) {
-			$.mockjaxClear();
+			$.mockjaxClear(this.mockId);
 		}
 	});
 
@@ -360,8 +360,8 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 
 	test("Class defaults", function() {
 		var collection=new PagedCollection();
-		ok(collection instanceof PagedCollection);
-		ok(collection instanceof Backbone.Collection);
+		ok(collection instanceof PagedCollection, "instanceof PagedCollection");
+		ok(collection instanceof Backbone.Collection, "instanceof Backbone.Collection");
 		equal(collection.options.pagesize, 5);
 	});
 
@@ -375,6 +375,43 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 				added: [95, 96, 97, 98, 99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 				removed: []});
 			w.finalize();		
-		}
-	)});
+		});
+	});
+
+	asyncTest("Increasing position", function() {
+		var collection = new TestPagedCollection({pagesize: 5});
+		var w=new watch(collection);
+		collection.position=0;
+		collection.current.then(function() {
+			start();
+			w.verify({id: [95, 96, 97, 98, 99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+				added: [95, 96, 97, 98, 99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+				removed: []});
+
+
+			collection.position=1;
+			ok(collection.current==undefined);
+			w.verify({position: 1, added: [], removed: []});
+
+			collection.position=5;
+			collection.current.then(function() {
+				start();
+				w.verify({position: 5, added: [10, 11, 12, 13, 14], removed: [95, 96, 97, 98, 99]});
+
+				collection.position=8;
+				ok(!collection.current);
+
+				collection.position=10;
+				collection.current.then(function() {
+					start();
+					w.verify({position: 10, added: [15, 16, 17, 18, 19], removed: [0, 1, 2, 3, 4]});
+
+					w.finalize();		
+				});
+				stop();
+			});
+
+			stop();
+		});
+	});
 });

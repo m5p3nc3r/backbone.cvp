@@ -16,20 +16,48 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 			this.options=_.extend({}, DefaultOptions, options);
 		},
 
+		requireFetch: function(newPosition) {
+			var ret=this._position===undefined || this.range===undefined ||
+				newPosition<this.range.low || newPosition>=this.range.high;
+			return ret;
+		},
+
 		setPosition: function(position) {
-			var requireFetch=!this._position
+			var fetch=this.requireFetch(position);
 			this._position = position;
 
-			this.current=this.fetch();
+			if(fetch) this.current=this.fetch();
+		},
+
+		generateRange: function(position) {
+			var low=Math.floor(position/this.options.pagesize)*this.options.pagesize;
+			var high=low+this.options.pageSize;
+			return {
+				low: low, high: low+this.options.pagesize,
+				start: low-this.options.pagesize, count: this.options.pagesize*3
+			}
 		},
 
 		sync: function(method, model, options) {
-			var extraArgs=this.options.generateArgs(-5, this.options.pagesize*3);
+			this.range=this.generateRange(this._position);
+			var extraArgs=this.options.generateArgs(this.range.start, this.range.count);
 			if(!options.data){
 				options.data=extraArgs;
 			} else	{
 				_.extend(options.data , extraArgs);
 			}
+			var that=this;
+			var success=options.success;
+			options.success=function() {
+				that.current=undefined;
+				if(success) success.apply(this, arguments);
+			}
+			var error=options.error;
+			options.error=function() {
+				that.current=undefined;
+				if(error) error.apply(this, arguments);
+			}
+
 			return Backbone.Collection.prototype.sync.call(this, method, model, options);
 		}
 	});
