@@ -25,8 +25,8 @@ require.config({
   }
 });
 
-require(["jquery", "backbone", "collectionviewproxy", "mockjax"],
-function($, Backbone, CollectionViewProxy) {
+require(["jquery", "backbone", "collectionviewproxy", "pagedcollection", "mockjax"],
+function($, Backbone, CollectionViewProxy, PagedCollection) {
 
 	var watch=function(collection) {
 		var added=[];
@@ -276,44 +276,27 @@ function($, Backbone, CollectionViewProxy) {
 		w.finalize();
 	});
 
-
-	var getURLArgs=function(uri) {
-		var ret={};
-    	var parts=uri.split('?');
-    	if(parts.length>1) {
-    		var args=parts[1].split('&');
-    		_.each(args, function(arg) {
-    			var pair=arg.split('=');
-    			ret[pair[0]]=pair.length>1 ? pair[1] : undefined;
-    		});
-    	}
-    	return ret;
-    };	
-
 	module("CollectionViewProxy remote collection", {
-
 		setup: function(assert) {			
 			$.mockjax({
 				url: /^\/data\?*/,
 				responseTime: 0,
 				contentType: 'text/json',
 				response: function(request) {
-					var args=getURLArgs(request.url);
-					var start=Number.parseInt(args.start);
-					this.responseText=_(args.count).times(
-						function(n) {return {"id": start+n}}
+					this.responseText=_(request.data.count).times(
+						function(n) {return {"id": request.data.start+n}}
 					);
 				}
 			});
 		},
 		teardown: function(assert) {
-
+			$.mockjaxClear();
 		}
 	});
 
 	var TestCollection = Backbone.Collection.extend({
 		url: function() {
-			return "/data?start=0&count=5";
+			return "/data";
 		}
 	});
 
@@ -321,7 +304,7 @@ function($, Backbone, CollectionViewProxy) {
 		var source = new TestCollection();
 		var collection = new CollectionViewProxy(source, {count: 5});
 		var w = new watch(collection);
-		source.fetch().then(
+		source.fetch({data: {start: 0, count: 5}}).then(
 			function() {
 				start();
 				w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [0, 1, 2, 3, 4], removed: []});
@@ -342,4 +325,56 @@ function($, Backbone, CollectionViewProxy) {
 			});
 	});
 
+
+	module("PagedCollection", {
+		setup: function(assert) {			
+			$.mockjax({
+				url: /^\/data\?*/,
+				responseTime: 0,
+				contentType: 'text/json',
+				response: function(request) {
+					var count=request.data.count;
+					var number=request.data.start;
+					var ret=[];
+					var normalize=function(number, max) {
+						number=number%max;
+						if(number<0) number+=max;
+						return number;
+					}
+					while(count--) {
+						ret.push({id: normalize(number,100)});
+						number++;
+					}
+					this.responseText=ret;
+				}
+			});
+		},
+		teardown: function(assert) {
+			$.mockjaxClear();
+		}
+	});
+
+	var TestPagedCollection = PagedCollection.extend({
+		url: '/data'
+	});
+
+	test("Class defaults", function() {
+		var collection=new PagedCollection();
+		ok(collection instanceof PagedCollection);
+		ok(collection instanceof Backbone.Collection);
+		equal(collection.options.pagesize, 5);
+	});
+
+	asyncTest("Initial fetch", function() {
+		var collection = new TestPagedCollection({pagesize: 5});
+		var w=new watch(collection);
+		collection.position=0;
+		collection.current.then(function() {
+			start();
+			w.verify({id: [95, 96, 97, 98, 99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+				added: [95, 96, 97, 98, 99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+				removed: []});
+			w.finalize();		
+		}
+	)});
 });
