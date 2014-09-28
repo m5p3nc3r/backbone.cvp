@@ -59,7 +59,7 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 
 		this.verify=function(options) {
 			var safeAt = function(collection, index) {
-				return index<collection.length ? collection.at(index) : {};
+				return index<collection.length ? collection.models[index] : {};
 			};
 
 			var safeArray = function(array, index) {
@@ -304,25 +304,25 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 		var source = new TestCollection();
 		var collection = new CollectionViewProxy(source, {count: 5});
 		var w = new watch(collection);
-		source.fetch({data: {start: 0, count: 5}}).then(
-			function() {
-				start();
-				w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [0, 1, 2, 3, 4], removed: []});
-				source.pop();
-				w.verify({id: [0, 1, 2, 3], position: 0, added: [], removed: [4]});
-				source.pop();
-				w.verify({id: [0, 1, 2], position: 0, added: [], removed: [3]});
-				source.pop();
-				w.verify({id: [0, 1], position: 0, added: [], removed: [2]});
-				source.pop();
-				w.verify({id: [0], position: 0, added: [], removed: [1]});
-				source.pop();
-				w.verify({id: [], position: 0, added: [], removed: [0]});
-				w.finalize();
-			},
-			function() {
-				console.log("Error reading source");
-			});
+		source.fetch({data: {start: 0, count: 5}}).then(function() {
+			start();
+			w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [0, 1, 2, 3, 4], removed: []});
+			source.pop();
+			w.verify({id: [0, 1, 2, 3], position: 0, added: [], removed: [4]});
+			source.pop();
+			w.verify({id: [0, 1, 2], position: 0, added: [], removed: [3]});
+			source.pop();
+			w.verify({id: [0, 1], position: 0, added: [], removed: [2]});
+			source.pop();
+			w.verify({id: [0], position: 0, added: [], removed: [1]});
+			source.pop();
+			w.verify({id: [], position: 0, added: [], removed: [0]});
+			w.finalize();
+		},
+		function() {
+			start();
+			console.log("Error reading source");
+		});
 	});
 
 
@@ -345,7 +345,10 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 						ret.push({id: normalize(number,100)});
 						number++;
 					}
-					this.responseText=ret;
+					this.responseText={
+						count: 100,
+						data: ret
+					};
 				}
 			});
 		},
@@ -355,7 +358,10 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 	});
 
 	var TestPagedCollection = PagedCollection.extend({
-		url: '/data'
+		url: '/data',
+		parse: function(response, options) {
+			return response.data;
+		}
 	});
 
 	test("Class defaults", function() {
@@ -394,6 +400,7 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 			w.verify({position: 1, added: [], removed: []});
 
 			collection.position=5;
+			stop();
 			collection.current.then(function() {
 				start();
 				w.verify({position: 5, added: [10, 11, 12, 13, 14], removed: [95, 96, 97, 98, 99]});
@@ -402,16 +409,14 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 				ok(!collection.current);
 
 				collection.position=10;
+				stop();
 				collection.current.then(function() {
 					start();
 					w.verify({position: 10, added: [15, 16, 17, 18, 19], removed: [0, 1, 2, 3, 4]});
 
 					w.finalize();		
 				});
-				stop();
 			});
-
-			stop();
 		});
 	});
 
@@ -426,6 +431,7 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 				removed: []});
 
 			collection.position=-1;
+			stop();
 			collection.current.then(function() {
 				start();
 				w.verify({position: -1, added: [90, 91, 92, 93, 94], removed: [5, 6, 7, 8, 9]});
@@ -434,17 +440,64 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 				ok(!collection.current);
 
 				collection.position=-7;
+				stop();
 				collection.current.then(function() {
 					start();
 					w.verify({position: -7, added: [85, 86, 87, 88, 89], removed: [0, 1, 2, 3, 4]});
 
 					w.finalize();		
 				});
-				stop();
 			});
-
-			stop();
 		});
+	});
 
-	})
+
+	module("Paged CollectionViewProxy", {
+		setup: function(assert) {			
+			this.mockId=$.mockjax({
+				url: /^\/data\?*/,
+				responseTime: 0,
+				contentType: 'text/json',
+				response: function(request) {
+					var count=request.data.count;
+					var number=request.data.start;
+					var ret=[];
+					var normalize=function(number, max) {
+						number=number%max;
+						if(number<0) number+=max;
+						return number;
+					}
+					while(count--) {
+						ret.push({id: normalize(number,100)});
+						number++;
+					}
+					this.responseText={
+						count: 100,
+						data: ret
+					};
+				}
+			});
+		},
+		teardown: function(assert) {
+			$.mockjaxClear(this.mockId);
+		}
+	});
+
+	asyncTest("Initialise" , function() {
+		var source = new TestPagedCollection();
+		var collection = new CollectionViewProxy(source, {count: 5});
+		var w=new watch(collection);
+		collection.position=0;
+		ok(source.current);
+		if(source.current) {
+			source.current.then(function() {
+				start();
+				w.verify({position: 0, added: [0, 1, 2, 3, 4]})
+				ok(true);
+	//		source.
+		});
+	}
+			
+	});
+
 });
