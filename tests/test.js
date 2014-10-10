@@ -360,7 +360,11 @@ function($, Backbone, CollectionViewProxy, PagedCollection) {
 	var TestPagedCollection = PagedCollection.extend({
 		url: '/data',
 		parse: function(response, options) {
+			this.serverDataLength=response.count;
 			return response.data;
+		},
+		getServerDataLength: function() {
+			return this.serverDataLength;
 		}
 	});
 

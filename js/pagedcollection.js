@@ -39,8 +39,8 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 		},
 
 		sync: function(method, model, options) {
-			this.range=this.generateRange(this._position);
-			var extraArgs=this.options.generateArgs(this.range.start, this.range.count);
+			var range=this.generateRange(this._position);
+			var extraArgs=this.options.generateArgs(range.start, range.count);
 			if(!options.data){
 				options.data=extraArgs;
 			} else	{
@@ -50,6 +50,7 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 			var success=options.success;
 			options.success=function() {
 				that.current=undefined;
+				that.range=range;
 				if(success) success.apply(this, arguments);
 			}
 			var error=options.error;
@@ -59,6 +60,16 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 			}
 
 			return Backbone.Collection.prototype.sync.call(this, method, model, options);
+		},
+
+		getServerDataLength: function() {
+			return 0;
+		},
+
+		// Override the 'at' function because we only have a subset of the complete data set
+		at: function(index) {
+			var i=index-this.range.start;
+			return this.models[i];
 		}
 	});
 
@@ -66,6 +77,11 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 		get: function() { return this._position; },
 		set: function(v) { this.setPosition(v)}
 	});
+
+//	Object.defineProperty(PagedCollection.prototype, "length", {
+//		get: function() { return this.getServerDataLength(); },
+//		set: function(v) {/* Not valid to set the length, it's server set */}
+//	});
 
 	return PagedCollection;
 });

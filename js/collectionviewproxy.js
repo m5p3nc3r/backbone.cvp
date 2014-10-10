@@ -36,22 +36,29 @@ define(['backbone', 'underscore'], function(Backbone, _) {
 				return x;
 			}
 
-			var count=Math.min(this.options.count, this.collection.length);
-			var pos=normailze(Math.floor(position+this.options.offset),this.collection.length);
+			var length=this.collection.models.length;
+
+			var count=Math.min(this.options.count, length);
+			var pos=normailze(Math.floor(position+this.options.offset),length);
 			var models=[];
+
+			this.collection.position=position;
 
 			// Check the condition where we don't need a clone (length<count),
 			// but need count+1 items (positoin%1!=0)
-			if(position%1!=0 && this.collection.length>this.options.count) count+=1;
+			if(position%1!=0 && length>this.options.count) count+=1;
 			while(count) {
+				var m=this.collection.at(pos);
+				if(!m)
+					console.log("BREAK");
 				models.push(this.collection.at(pos));
 				pos++;
-				if(pos>=this.collection.length) pos=0;
+				if(pos>=length) pos=0;
 				count--;
 			}
 
 			// Check to see if a clone is needed
-			if(this.collection.length<=this.options.count && position%1!=0) {
+			if(length<=this.options.count && position%1!=0) {
 				models.push(this._createClone(models[0]));
 			}
 
