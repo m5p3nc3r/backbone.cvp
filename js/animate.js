@@ -1,57 +1,57 @@
-define([
-    'underscore'
-],function(_) {
-    var AnimationDefaults = {
-        // Default duration 1 second
-        duration: 1000,
-        // Default easing - linear
-        easing: function(t) { return t; }
-    };
+"use strict";
 
-    function Animate(defaults) {
-        this.defaults=_.extend({}, AnimationDefaults, defaults);
-    };
+var _ = require('underscore');
 
-    Animate.prototype.start = function(givenArgs) {
-        var args=_.extend({}, this.defaults, givenArgs);
-        args.delta=args.to - args.from;
+var AnimationDefaults = {
+    // Default duration 1 second
+    duration: 1000,
+    // Default easing - linear
+    easing: function(t) { return t; }
+};
 
-        var startTime=new Date().getTime();
+var Animate = function(defaults) {
+    this.defaults=_.extend({}, AnimationDefaults, defaults);
+};
 
-        var animationLoop=_.bind(function() {
-            var now=new Date().getTime();
-            // Calculate the delta
-            var delta=(now-startTime)/args.duration;
-            if(delta>1) delta=1;
-            
-            args.step(args.from + (args.delta*args.easing(delta)));
-            
-            if(delta<1) {
-                this.id=window.requestAnimationFrame(animationLoop);
-            } else {
-                this.id=undefined;
-                if(args.complete) {
-                    args.complete();
-                }
-            }
-        },this);
+Animate.prototype.start = function(givenArgs) {
+    var args=_.extend({}, this.defaults, givenArgs);
+    args.delta=args.to - args.from;
 
-        animationLoop();
+    var startTime=new Date().getTime();
 
-        return this;
-    };
-
-    Animate.prototype.stop = function() {
-        if(this.id!==undefined) {
-            window.cancelAnimationFrame(this.id);
+    var animationLoop=_.bind(function() {
+        var now=new Date().getTime();
+        // Calculate the delta
+        var delta=(now-startTime)/args.duration;
+        if(delta>1) delta=1;
+        
+        args.step(args.from + (args.delta*args.easing(delta)));
+        
+        if(delta<1) {
+            this.id=window.requestAnimationFrame(animationLoop);
+        } else {
             this.id=undefined;
+            if(args.complete) {
+                args.complete();
+            }
         }
-        return this;
-    };
+    },this);
 
-    Animate.prototype.running = function() {
-        return this.id!==undefined;
+    animationLoop();
+
+    return this;
+};
+
+Animate.prototype.stop = function() {
+    if(this.id!==undefined) {
+        window.cancelAnimationFrame(this.id);
+        this.id=undefined;
     }
+    return this;
+};
 
-    return Animate;
-})
+Animate.prototype.running = function() {
+    return this.id!==undefined;
+};
+
+module.exports = Animate;

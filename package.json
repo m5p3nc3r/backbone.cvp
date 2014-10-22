@@ -1,0 +1,19 @@
+{
+  "name": "Backbone.cvp",
+  "description": "Backbone CollectionViewProxy",
+  "author": "Matt Spencer <matthew@thespencers.me.uk>",
+  "version": "0.0.1",
+  "dependencies": {
+    "backbone": "1.1.0",
+    "jquery": "2.1.1",
+    "underscore": "1.5.2"
+  },
+  "devDependencies": {
+      "browserify": "latest",
+      "qunitjs": "1.15.0",
+      "grunt": "~0.4.5",
+      "grunt-browserify": "latest",
+      "grunt-contrib-watch": "latest",
+      "grunt-contrib-jshint": "latest"
+  }
+}

@@ -1,27 +1,13 @@
-require.config({
-  baseUrl: "../js",
-  paths: {
-  	"backbone": "libs/backbone/backbone-1.1.0",
-  	"underscore": "libs/underscore/underscore",
-  	"jquery": "libs/jquery/jquery-2.0.3"
-  },
-  shim: {
-  	"jquery": {
-  		exports: "$"
-  	},
-  	"backbone": {
-  		deps: ["underscore", "jquery"],
-  		exports: "Backbone"
-  	},
-  	"underscore": {
-  		exports: "_"
-  	}
-  }
-});
-
-require(["backbone", "underscore", "./listview.js", "collectionviewproxy", "animate", "easing", "touch", "cache"],
-function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cache) {
-
+var $=require('jquery');
+var Backbone = require('backbone');
+Backbone.$ = $;
+var _ = require('underscore');
+var ListView = require('./listview');
+var CollectionViewProxy = require('../js/collectionviewproxy');
+var Animate = require('../js/animate');
+var Easing = require('../js/easing');
+var Touch = require('../js/touch');
+var Cache = require('../js/cache');
 
 	var GridView = Backbone.View.extend({
 		tagName: "div",
@@ -87,8 +73,8 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 			if(delta<0) delta+=1;
 			this.collection.each(function(model, index) {
 				var alpha=1;
-				if(index==0) alpha=1-delta;
-				if(index==length-1 && delta!=0) alpha=delta;
+				if(index===0) alpha=1-delta;
+				if(index==length-1 && delta!==0) alpha=delta;
 				model.view.$el.css('transform', 'translate3D(0,'+Math.round((index-delta)*100)+'%,0');
 				model.view.$el.css('opacity', alpha);
 			});
@@ -104,8 +90,8 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 		parent: $('body'),
 	};
 	
-	var Controller = function(config) {
-		var config=_.extend({}, ControllerDefaults, config);
+	var Controller = function(cfg) {
+		var config=_.extend({}, ControllerDefaults, cfg);
 		var collection = this.collection = new CollectionViewProxy(config.source, {count: config.count});
 		var animate = this.animate = new Animate({
 			duration: 700,
@@ -131,7 +117,7 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 			onStart: function(t) {
 				animate.stop();
 				var item=view.collection.at(0).view.$el;
-				t.itemSize=config.horizontal ? item.outerWidth() : item.outerHeight();;
+				t.itemSize=config.horizontal ? item.outerWidth() : item.outerHeight();
 			},
 			onMove: function(t) {
 				collection.position -= (config.horizontal ? t.delta.x : t.delta.y)/t.itemSize;
@@ -149,6 +135,7 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 		this.animate.stop().start({from: this.collection.position, to: this.targetPosition+=1});
 	};
 
+$(document).ready( function() {
 	var c=new Controller({
 		horizontal: false,
 		source: new Backbone.Collection(_(10).times(function(n) {return {"id": n}; })),
@@ -156,6 +143,8 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 		count: 5,
 		parent: $('body')
 	});
+
+
 
 	$('body').on('keydown', function(event) {
 		var preventDefault=true;
@@ -178,5 +167,4 @@ function(Backbone, _, ListView, CollectionViewProxy, Animate, Easing, Touch, Cac
 		}
 		if(preventDefault) event.preventDefault();
 	});
-
 });
