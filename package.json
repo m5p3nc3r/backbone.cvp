@@ -9,11 +9,13 @@
     "underscore": "1.5.2"
   },
   "devDependencies": {
-      "browserify": "latest",
-      "qunitjs": "1.15.0",
-      "grunt": "~0.4.5",
-      "grunt-browserify": "latest",
-      "grunt-contrib-watch": "latest",
-      "grunt-contrib-jshint": "latest"
+    "browserify": "latest",
+    "qunitjs": "1.15.0",
+    "tape": "~3.0.1",
+    "gulp": "~3.8.9",
+    "yargs": "~1.3.2",
+    "watchify": "~2.0.0",
+    "vinyl-source-stream": "~1.0.0",
+    "gulp-jshint": "~1.8.6"
   }
 }
