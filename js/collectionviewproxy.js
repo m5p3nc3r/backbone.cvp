@@ -30,15 +30,8 @@ var CollectionViewProxy = Backbone.Collection.extend({
 	},
 
 	setPosition: function(position) {
-
-		var normailze=function(x,length) {
-			x=x%length;
-			if(x<0) x+=length;
-			return x;
-		};
-
 		var count=Math.min(this.options.count, this.collection.length);
-		var pos=normailze(Math.floor(position+this.options.offset),this.collection.length);
+		var pos=this.normalize(Math.floor(position+this.options.offset));
 		var models=[];
 
 		// Check the condition where we don't need a clone (length<count),
@@ -98,6 +91,7 @@ var CollectionViewProxy = Backbone.Collection.extend({
 				.on('reset', this._onReset, this);
 		}
 
+
 		// Reset the position to the default
 		this._position=this.options.position;
 
@@ -113,7 +107,16 @@ var CollectionViewProxy = Backbone.Collection.extend({
 		}
 
 		Backbone.Collection.prototype.reset.call(this,models, {proxy: false});
-	}
+	},
+	at: function(index) {
+		var actualIndex=this.normalize(index); 
+		return this.collection.at(actualIndex);
+	},
+	normalize: function(x) {
+		x=x%this.collection.length;
+		if(x<0) x+=this.collection.length;
+		return x;
+	},
 });
 
 // Override specific functions of Backbone.Collection, pass the call on to the underlying collection
@@ -121,9 +124,9 @@ var CollectionViewProxy = Backbone.Collection.extend({
 var methods=["add", "remove", "reset"];
 _.each(methods, function(method) {
     CollectionViewProxy.prototype[method] = function() {
-	var target=this.collection;
-	if(arguments[1] && arguments[1].proxy===false) target=this;
-	return Backbone.Collection.prototype[method].apply(target, arguments);
+		var target=this.collection;
+		if(arguments[1] && arguments[1].proxy===false) target=this;
+		return Backbone.Collection.prototype[method].apply(target, arguments);
     };
 });
 
@@ -132,6 +135,14 @@ _.each(methods, function(method) {
 Object.defineProperty(CollectionViewProxy.prototype, "position", {
 	get: function() { return this._position; },
 	set: function(v) { this.setPosition(v); }
+});
+
+Object.defineProperty(CollectionViewProxy.prototype, "total", {
+	get: function() {
+		var collectionTotal=this.collection.total;
+		if(collectionTotal===undefined) collectionTotal=this.collection.length;
+		return collectionTotal;
+	}
 });
 
 module.exports = CollectionViewProxy;

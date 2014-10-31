@@ -1,4 +1,3 @@
-
 "use strict";
 
 var test=require('prova'); // Use prova to allow the tests to be run in a browser
@@ -41,7 +40,7 @@ var Watch=function(test, collection) {
 
     this.verify=function(options) {
 	var safeAt = function(collection, index) {
-	    return index<collection.length ? collection.at(index) : {};
+	    return index<collection.length ? collection.models[index] : {};
 	};
 	
 	var safeArray = function(array, index) {
