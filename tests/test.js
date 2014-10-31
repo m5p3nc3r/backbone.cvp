@@ -2,11 +2,11 @@
 "use strict";
 
 var test=require('prova'); // Use prova to allow the tests to be run in a browser
-var $=require('jquery');
 var _=require('underscore');
 var Backbone=require('backbone');
-Backbone.$=$;
+Backbone.$=require('jquery');
 var CollectionViewProxy = require('../js/collectionviewproxy');
+var sinon=require('sinon');
 
 var Watch=function(test, collection) {
     var added=[];
@@ -122,7 +122,7 @@ test("Update position", function(t) {
     w.finalize();
 });
 
-test("Upadte position negative", function(t) {
+test("Update position negative", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w = new Watch(t, collection);
@@ -273,61 +273,46 @@ var getURLArgs=function(uri) {
     return ret;
 }
 
-// module("CollectionViewProxy remote collection", {
 
-// 	setup: function(assert) {
-// 	    var server=fakeServer.create();
-// 	    server.respondWith(/^\/data\?*/, function(xhr, id) {
-// 		console.log("Request id = " +  id);
-// 	    });
-
-// 		// $.mockjax({
-// 		// 	url: /^\/data\?*/,
-// 		// 	responseTime: 0,
-// 		// 	contentType: 'text/json',
-// 		// 	response: function(request) {
-// 		// 		var args=getURLArgs(request.url);
-// 		// 		var start=Number.parseInt(args.start);
-// 		// 		this.responseText=_(args.count).times(
-// 		// 			function(n) {return {"id": start+n}; }
-// 		// 		);
-// 		// 	}
-// 		// });
-// 	},
-// 	teardown: function(assert) {
-
-// 	}
-// });
+var server = sinon.fakeServer.create();
+server.respondWith(/\/data(.)*/, function(xhr, id) {
+    var args=getURLArgs(xhr.url);
+    var start=Number.parseInt(args.start);
+    var responseText=_(args.count).times(
+	function(n) {return {"id": start+n}; }
+    );
+    xhr.respond(200, {'Content-Type': 'application-json'}, JSON.stringify(responseText));
+});
+server.autoRespond=true;
 
 var TestCollection = Backbone.Collection.extend({
-	url: function() {
-		return "/data?start=0&count=5";
-	}
+    url: function() {
+	return "/data?start=0&count=5";
+    }
 });
 
-// test/*asyncTest*/("remove less than 'count'!", function(t) {
-//     var source = new TestCollection();
-//     var collection = new CollectionViewProxy(source, {count: 5});
-//     var w = new Watch(t, collection);
-//     source.fetch().then(
-// 	function() {
-// 	    start();
-// 	    w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [0, 1, 2, 3, 4], removed: []});
-// 	    source.pop();
-// 	    w.verify({id: [0, 1, 2, 3], position: 0, added: [], removed: [4]});
-// 	    source.pop();
-// 	    w.verify({id: [0, 1, 2], position: 0, added: [], removed: [3]});
-// 	    source.pop();
-// 	    w.verify({id: [0, 1], position: 0, added: [], removed: [2]});
-// 	    source.pop();
-// 	    w.verify({id: [0], position: 0, added: [], removed: [1]});
-// 	    source.pop();
-// 	    w.verify({id: [], position: 0, added: [], removed: [0]});
-// 	    w.finalize();
-// 	},
-// 	function() {
-// 	    t.fail("Error reading from mock source");
-// 	    t.end();
-// 	});
-// });
+test("ASync remove less than 'count'", function(t) {
+    var source = new TestCollection();
+    var collection = new CollectionViewProxy(source, {count: 5});
+    var w = new Watch(t, collection);
+    source.fetch().then(
+  	function() {
+ 	    w.verify({id: [0, 1, 2, 3, 4], position: 0, added: [0, 1, 2, 3, 4], removed: []});
+ 	    source.pop();
+ 	    w.verify({id: [0, 1, 2, 3], position: 0, added: [], removed: [4]});
+ 	    source.pop();
+ 	    w.verify({id: [0, 1, 2], position: 0, added: [], removed: [3]});
+ 	    source.pop();
+ 	    w.verify({id: [0, 1], position: 0, added: [], removed: [2]});
+ 	    source.pop();
+ 	    w.verify({id: [0], position: 0, added: [], removed: [1]});
+ 	    source.pop();
+ 	    w.verify({id: [], position: 0, added: [], removed: [0]});
+  	    w.finalize();
+  	},
+  	function() {
+  	    t.fail("Error reading from mock source");
+  	    t.end();
+  	});
+});
 
