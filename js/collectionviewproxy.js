@@ -1,6 +1,7 @@
 "use strict";
 
 var Backbone = require('backbone');
+var PagedCollection = require('./pagedcollection'); // TODO: Break dependency on PagedCollection
 var _ = require('underscore');
 
 var DefaultOptions = {
@@ -33,6 +34,12 @@ var CollectionViewProxy = Backbone.Collection.extend({
 		var count=Math.min(this.options.count, this.collection.length);
 		var pos=this.normalize(Math.floor(position+this.options.offset));
 		var models=[];
+
+		// Pass on position information to base collection (if needed)
+		// TODO: Break dependency on PagedCollection here
+		if(this.collection instanceof PagedCollection) {
+			this.collection.position = position;
+		}
 
 		// Check the condition where we don't need a clone (length<count),
 		// but need count+1 items (positoin%1!=0)

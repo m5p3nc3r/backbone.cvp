@@ -423,3 +423,19 @@ test("Decreasing position", function(t) {
 		});
 	});
 });
+
+test("PagedCollectionProxy", function(t) {
+	var paged = new TestPagedCollection({pagesize: 5});
+	var collection = new CollectionViewProxy(paged, {count: 5});
+	var cw=new Watch(t, collection);
+	collection.position=0;
+	// Should collection proxy through to the current XHR request?
+	// Then this could read collection.getXHR().when(...) ??
+	paged.current.then(function() {
+		cw.verify({
+			position: 0,
+			id: [0, 1, 2, 3, 4]
+		});
+		cw.finalize();
+	});
+});
