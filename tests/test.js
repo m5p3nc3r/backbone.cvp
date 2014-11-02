@@ -114,7 +114,9 @@ var Watch=function(test, collection) {
     };
 };
 
-test("Class defaults", function(t) {
+var module = "CollectionViewProxy : ";
+
+test(module + "Class defaults", function(t) {
     var collection=new CollectionViewProxy(new Backbone.Collection());
     t.ok(collection instanceof CollectionViewProxy);
     t.ok(collection instanceof Backbone.Collection);
@@ -122,7 +124,7 @@ test("Class defaults", function(t) {
     t.end();
 });
 
-test("Constructor", function(t) {
+test(module + "Constructor", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w=new Watch(t, collection);
@@ -130,7 +132,7 @@ test("Constructor", function(t) {
     w.finalize();
 });
 
-test("Constructor offset", function(t) {
+test(module + "Constructor offset", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w = new Watch(t, collection);
@@ -139,7 +141,7 @@ test("Constructor offset", function(t) {
 });
 
 
-test("Update position", function(t) {
+test(module + "Update position", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w = new Watch(t, collection);
@@ -149,7 +151,7 @@ test("Update position", function(t) {
     w.finalize();
 });
 
-test("Update position negative", function(t) {
+test(module + "Update position negative", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w = new Watch(t, collection);
@@ -159,7 +161,7 @@ test("Update position negative", function(t) {
     w.finalize();
 });
 
-test("Reset", function(t) {
+test(module + "Reset", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w=new Watch(t, collection);
@@ -169,7 +171,7 @@ test("Reset", function(t) {
     w.finalize();
 });
 
-test("Add out of window", function(t) {
+test(module + "Add out of window", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -179,7 +181,7 @@ test("Add out of window", function(t) {
     w.finalize();
 });
 
-test("Add in window", function(t) {
+test(module + "Add in window", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w=new Watch(t, collection);
@@ -189,7 +191,7 @@ test("Add in window", function(t) {
     w.finalize();
 });
 
-test("Remove out of window", function(t) {
+test(module + "Remove out of window", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -199,7 +201,7 @@ test("Remove out of window", function(t) {
     w.finalize();
 });
 
-test("Remove in window", function(t) {
+test(module + "Remove in window", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -209,7 +211,7 @@ test("Remove in window", function(t) {
     w.finalize();
 });
 
-test("increasing position", function(t) {
+test(module + "increasing position", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -223,7 +225,7 @@ test("increasing position", function(t) {
     w.finalize();
 });
 
-test("decreasing position", function(t) {
+test(module + "decreasing position", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -238,7 +240,7 @@ test("decreasing position", function(t) {
 });
 
 
-test("short collection", function(t) {
+test(module + "short collection", function(t) {
     var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -246,7 +248,7 @@ test("short collection", function(t) {
     w.finalize();
 });
 
-test("short collection offset", function(t) {
+test(module + "short collection offset", function(t) {
     var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -1});
     var w = new Watch(t, collection);
@@ -254,7 +256,7 @@ test("short collection offset", function(t) {
     w.finalize();
 });
 
-test("short collection position", function(t) {
+test(module + "short collection position", function(t) {
     var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -268,7 +270,7 @@ test("short collection position", function(t) {
     w.finalize();
 });
 
-test("remove less than 'count'", function(t) {
+test(module + "remove less than 'count'", function(t) {
     var source = new Backbone.Collection(_(5).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
@@ -334,6 +336,8 @@ server.respondWith(/\/pagedData(.)*/, function(xhr, id) {
 // Set the server to auto respond
 server.autoRespond=true;
 
+module = "CollectionViewProxy async : ";
+
 var TestCollection = Backbone.Collection.extend({
     url: function() {
 		return "/data?start=0&count=5";
@@ -341,7 +345,7 @@ var TestCollection = Backbone.Collection.extend({
 });
 
 
-test("remove less than 'count'", function(t) {
+test(module + "remove less than 'count'", function(t) {
 	var source = new TestCollection();
 	var collection = new CollectionViewProxy(source, {count: 5});
 	var w = new Watch(t, collection);
@@ -364,6 +368,8 @@ test("remove less than 'count'", function(t) {
 	});
 });
 
+var module="PagedCollection : "
+
 var TestPagedCollection = PagedCollection.extend({
 	url: '/pagedData',
 	parse: function(response, options) {
@@ -375,7 +381,7 @@ var TestPagedCollection = PagedCollection.extend({
 	}
 });
 
-test("PagedCollection Class defaults", function(t) {
+test(module + "Class defaults", function(t) {
 	var collection=new PagedCollection();
 	t.ok(collection instanceof PagedCollection, "instanceof PagedCollection");
 	t.ok(collection instanceof Backbone.Collection, "instanceof Backbone.Collection");
@@ -383,7 +389,7 @@ test("PagedCollection Class defaults", function(t) {
 	t.end();
 });
 
-test("PagedCollectionInitial fetch", function(t) {
+test(module + "Initial fetch", function(t) {
 	var collection = new TestPagedCollection({pagesize: 5});
 	var w=new Watch(t, collection);
 	collection.position=0;
@@ -393,7 +399,7 @@ test("PagedCollectionInitial fetch", function(t) {
 	});
 });
 
-test("Increasing position", function(t) {
+test(module + "Increasing position", function(t) {
 	var collection = new TestPagedCollection({pagesize: 5});
 	var w=new Watch(t, collection);
 	collection.position=0;
@@ -421,7 +427,7 @@ test("Increasing position", function(t) {
 	});
 });
 
-test("Decreasing position", function(t) {
+test(module + "Decreasing position", function(t) {
 	var collection = new TestPagedCollection({pagesize: 5});
 	var w=new Watch(t, collection);
 	collection.position=0;
@@ -445,7 +451,9 @@ test("Decreasing position", function(t) {
 	});
 });
 
-test("PagedCollectionProxy", function(t) {
+module = "PagedCollectionProxy : ";
+
+test(module + "Bootstrap", function(t) {
 	var paged = new TestPagedCollection({pagesize: 5});
 	var collection = new CollectionViewProxy(paged, {count: 5});
 	var cw=new Watch(t, collection);
