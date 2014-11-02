@@ -13,77 +13,78 @@ var Watch=function(test, collection) {
     var removed=[];
     var reset=[];
     var t=test;
+
     collection.on("add", function(models, collection) {
-	if(_.isArray(models)) {
-	    _.each(models, function(model) { added.push(model);});
-	} else {
-	    added.push(models);
-	} 
+		if(_.isArray(models)) {
+		    _.each(models, function(model) { added.push(model);});
+		} else {
+	    	added.push(models);
+		} 
     });
     collection.on("remove", function(models, collection) {
-	if(_.isArray(models)) {
-	    _.each(models, function(model) { removed.push(model);});
-	} else {
-	    removed.push(models);
-	}
+		if(_.isArray(models)) {
+	    	_.each(models, function(model) { removed.push(model);});
+		} else {
+	   		removed.push(models);
+		}
     });
     collection.on("reset", function(collection, options) {
 	_.each(collection.models, function(model) { reset.push(model);});
     });
 
     this.finalize = function() {
-	collection.off();
-	added=undefined;
-	removed=undefined;
-	reset=undefined;
-	t.end();
+		collection.off();
+		added=undefined;
+		removed=undefined;
+		reset=undefined;
+		t.end();
     };
 
     this.verify=function(options) {
-	var safeAt = function(collection, index) {
-	    return index<collection.length ? collection.models[index] : {};
-	};
+		var safeAt = function(collection, index) {
+	    	return index<collection.length ? collection.models[index] : {};
+		};
 	
-	var safeArray = function(array, index) {
-	    return index<array.length ? array[index] : {};
-	};
+		var safeArray = function(array, index) {
+			return index<array.length ? array[index] : {};
+		};
 	
-	if(options.position!==undefined) {
-	    t.equal(collection.position, options.position, "collection.position="+options.position);
-	}
-	if(options.id) {
-	    t.equal(collection.length, options.id.length, "Check collection length " + options.id.length);
-	    _.each(options.id, function(id, index) {
-		t.equal(safeAt(collection, index).id, id, "collection["+index+"]="+id);
-	    }, this);
-	}
-	if(options.sourceid) {
-	    t.equal(collection.collection.length, options.sourceid.length, "Check backing collection length " + options.id.length);
-	    _.each(options.sourceid, function(id, index) {
-		t.equal(safeAt(collection.collection, index).id, id, "collection["+index+"]="+id);
-	    }, this);				
-	}
-	if(options.added) {
-	    t.equal(added.length, options.added.length, "Added length " + options.added.length);
-	    _.each(options.added, function(id, index) {
-		t.equal(id, safeArray(added, index).id);
-	    }, this);				
-	}
-	added=[];
-	if(options.removed) {
-	    t.equal(removed.length, options.removed.length, "Removed length " + options.removed.length);
-	    _.each(options.removed, function(id, index) {
-		t.equal(id, safeArray(removed, index).id);
-	    }, this);				
-	}
-	removed=[];
-	if(options.reset) {
-	    t.equal(reset.length, options.reset.length, "Reset length " + options.reset.length);
-	    _.each(options.reset, function(id, index) {
-		t.equal(id, reset[index].id);
-	    }, this);
-	}
-	reset=[];
+		if(options.position!==undefined) {
+		    t.equal(collection.position, options.position, "collection.position="+options.position);
+		}
+		if(options.id) {
+	    	t.equal(collection.length, options.id.length, "Check collection length " + options.id.length);
+		 	_.each(options.id, function(id, index) {
+				t.equal(safeAt(collection, index).id, id, "collection["+index+"]="+id);
+	    	}, this);
+		}
+		if(options.sourceid) {
+	    	t.equal(collection.collection.length, options.sourceid.length, "Check backing collection length " + options.id.length);
+	    	_.each(options.sourceid, function(id, index) {
+				t.equal(safeAt(collection.collection, index).id, id, "collection["+index+"]="+id);
+	    	}, this);				
+		}
+		if(options.added) {
+	    	t.equal(added.length, options.added.length, "Added length " + options.added.length);
+	    	_.each(options.added, function(id, index) {
+				t.equal(id, safeArray(added, index).id);
+	    	}, this);				
+		}
+		added=[];
+		if(options.removed) {
+	    	t.equal(removed.length, options.removed.length, "Removed length " + options.removed.length);
+	    	_.each(options.removed, function(id, index) {
+				t.equal(id, safeArray(removed, index).id);
+		    }, this);				
+		}
+		removed=[];
+		if(options.reset) {
+	    	t.equal(reset.length, options.reset.length, "Reset length " + options.reset.length);
+	    	_.each(options.reset, function(id, index) {
+			t.equal(id, reset[index].id);
+	    	}, this);
+		}
+		reset=[];
     };
 };
 
