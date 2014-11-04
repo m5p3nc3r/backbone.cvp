@@ -359,7 +359,6 @@ test(module + "remove less than 'count'", function(t) {
 	var w = new Watch(t, collection);
 	Promise.resolve(source.fetch({data: {start: 0, count: 5}}))
 	.then(function() {
-		throw new Error("Hello");
 		w.verify({id: "0:4", position: 0, added: "0:4", removed: []});
 		source.pop();
 		w.verify({id: "0:3", position: 0, added: [], removed: [4]});
@@ -375,7 +374,7 @@ test(module + "remove less than 'count'", function(t) {
 	.then(function() {
 		w.finalize();
 	},function(error) {
-		console.log("Error reading source:  " + error);
+		console.log(error);
 		w.finalize();
 	});
 });
