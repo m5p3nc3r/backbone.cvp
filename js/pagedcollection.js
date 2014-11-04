@@ -63,15 +63,16 @@ var PagedCollection = Backbone.Collection.extend({
 		return Backbone.Collection.prototype.sync.call(this, method, model, options);
 	},
 
-	getServerDataLength: function() {
-		return 0;
+	getServerTotal: function() {
+		throw Error("PagedCollection.getServerTotal needs to be overridden");
 	},
 
 	// Override the 'at' function because we only have a subset of the complete data set
 	at: function(index) {
+//		index=index%this.total;
 		var i=index-this.range.start;
 		return this.models[i];
-	}
+	},
 });
 
 Object.defineProperty(PagedCollection.prototype, "position", {
@@ -79,9 +80,9 @@ Object.defineProperty(PagedCollection.prototype, "position", {
 	set: function(v) { this.setPosition(v)}
 });
 
-//Object.defineProperty(PagedCollection.prototype, "length", {
-//	get: function() { return this.getServerDataLength(); },
+Object.defineProperty(PagedCollection.prototype, "total", {
+	get: function() { return this.getServerTotal(); },
 //	set: function(v) {/* Not valid to set the length, it's server set */}
-//});
+});
 
 module.exports = PagedCollection;

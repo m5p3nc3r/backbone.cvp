@@ -6,8 +6,9 @@
   "dependencies": {
     "backbone": "1.1.0",
     "jquery": "2.1.1",
-    "underscore": "1.5.2",
-    "sinon": "~1.11.1"
+    "promise": "^6.0.1",
+    "sinon": "~1.11.1",
+    "underscore": "1.5.2"
   },
   "devDependencies": {
     "browserify": "latest",

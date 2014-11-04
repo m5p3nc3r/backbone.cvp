@@ -7,6 +7,7 @@ Backbone.$=require('jquery');
 var CollectionViewProxy = require('../js/collectionviewproxy');
 var PagedCollection = require('../js/pagedcollection');
 var sinon=require('sinon');
+var Promise=require('promise');
 
 // Inclusive start, inclusive end
 // "0-5" = [0, 1, 2, 3, 4, 5]
@@ -14,7 +15,7 @@ var sinon=require('sinon');
 var range=function(str) {
 	var ret=[];
 	_.each(str.split(','), function(r) {
-		var args=r.split('-');
+		var args=r.split(':');
 		var start=Number.parseInt(args[0]);
 		var end=args.length>1 ? Number.parseInt(args[1]) : start;
 		if(start<=end) {
@@ -90,6 +91,14 @@ var Watch=function(test, collection) {
 				t.equal(safeAt(collection.collection, index).id, id, "collection["+index+"]="+id);
 	    	}, this);				
 		}
+		if(options.at) {
+			options.at.index=range(options.at.index);
+			options.at.id=range(options.at.id);
+			t.equal(options.at.index.length,options.at.id.length, "Check test data ranges correct");
+			_.each(options.at.index,function(i, index) {
+				t.equal(collection.at(i).id,options.at.id[index],"collection.at("+i+")="+options.at.id[index]);
+			});
+		}
 		if(fixupRange('added')) {
 	    	t.equal(added.length, options.added.length, "Added length " + options.added.length);
 	    	_.each(options.added, function(id, index) {
@@ -128,7 +137,7 @@ test(module + "Constructor", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w=new Watch(t, collection);
-    w.verify({id: "0-4"});
+    w.verify({id: "0:4"});
     w.finalize();
 });
 
@@ -136,18 +145,17 @@ test(module + "Constructor offset", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w = new Watch(t, collection);
-    w.verify({id: "8-9,0-2"});
+    w.verify({id: "8:9,0:2"});
     w.finalize();
 });
-
 
 test(module + "Update position", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w = new Watch(t, collection);
-    w.verify({id: "8-9,0-2", position: 0});
+    w.verify({id: "8:9,0:2", position: 0});
     collection.position = 1;
-    w.verify({id: "9,0-3", position: 1, added: [3], removed: [8]});
+    w.verify({id: "9,0:3", position: 1, added: [3], removed: [8]});
     w.finalize();
 });
 
@@ -155,9 +163,9 @@ test(module + "Update position negative", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w = new Watch(t, collection);
-    w.verify({id: "8,9,0-2", position: 0});
+    w.verify({id: "8,9,0:2", position: 0});
     collection.position = -1;
-    w.verify({id: "7-9,0,1", position: -1, added: [7], removed: [2]});
+    w.verify({id: "7:9,0,1", position: -1, added: [7], removed: [2]});
     w.finalize();
 });
 
@@ -165,9 +173,9 @@ test(module + "Reset", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w=new Watch(t, collection);
-    w.verify({id: "8,9,0-2"});
+    w.verify({id: "8,9,0:2"});
     collection.reset(_(10).times(function(n) {return {"id": 100+n}; }));
-    w.verify({id: "108,109,100-102", reset: "108,109,100-102"});
+    w.verify({id: "108,109,100:102", reset: "108,109,100:102"});
     w.finalize();
 });
 
@@ -176,8 +184,8 @@ test(module + "Add out of window", function(t) {
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
     collection.add([{id: 10}]);
-    w.verify({id: "0-4", added: [], removed: [],
-	      sourceid: "0-10"});
+    w.verify({id: "0:4", added: [], removed: [],
+	      sourceid: "0:10"});
     w.finalize();
 });
 
@@ -186,8 +194,8 @@ test(module + "Add in window", function(t) {
     var collection = new CollectionViewProxy(source, {count: 5, offset: -2});
     var w=new Watch(t, collection);
     collection.add([{id: 10}]);
-    w.verify({id: "9,10,0-2",added: [10], removed: [8],
-	      sourceid: "0-10"});
+    w.verify({id: "9,10,0:2",added: [10], removed: [8],
+	      sourceid: "0:10"});
     w.finalize();
 });
 
@@ -196,8 +204,8 @@ test(module + "Remove out of window", function(t) {
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
     collection.remove(source.at(8));
-    w.verify({id: "0-4", added: [], removed: [],
-	      sourceid: "0-7,9"});
+    w.verify({id: "0:4", added: [], removed: [],
+	      sourceid: "0:7,9"});
     w.finalize();
 });
 
@@ -206,8 +214,8 @@ test(module + "Remove in window", function(t) {
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
     collection.remove(source.at(2));
-    w.verify({id: "0,1,3-5", added: [5], removed: [2],
-	      sourceid: "0,1,3-9"});
+    w.verify({id: "0,1,3:5", added: [5], removed: [2],
+	      sourceid: "0,1,3:9"});
     w.finalize();
 });
 
@@ -215,13 +223,13 @@ test(module + "increasing position", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
-    w.verify({id: "0-4", position: 0, added: [], removed: []});
+    w.verify({id: "0:4", position: 0, added: [], removed: []});
     collection.position=0.3;
-    w.verify({id: "0-5", position: 0.3, added: [5], removed: []});
+    w.verify({id: "0:5", position: 0.3, added: [5], removed: []});
     collection.position=0.7;
-    w.verify({id: "0-5", position: 0.7, added: [], removed: []});
+    w.verify({id: "0:5", position: 0.7, added: [], removed: []});
     collection.position=1;
-    w.verify({id: "1-5", position: 1, added: [], removed: [0]});
+    w.verify({id: "1:5", position: 1, added: [], removed: [0]});
     w.finalize();
 });
 
@@ -229,13 +237,13 @@ test(module + "decreasing position", function(t) {
     var source = new Backbone.Collection(_(10).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
-    w.verify({id: "0-4", position: 0, added: [], removed: []});
+    w.verify({id: "0:4", position: 0, added: [], removed: []});
     collection.position=-0.3;
-    w.verify({id: "9,0-4", position: -0.3, added: [9], removed: []});
+    w.verify({id: "9,0:4", position: -0.3, added: [9], removed: []});
     collection.position=-0.7;
-    w.verify({id: "9,0-4", position: -0.7, added: [], removed: []});
+    w.verify({id: "9,0:4", position: -0.7, added: [], removed: []});
     collection.position=-1;
-    w.verify({id: "9,0-3", position: -1, added: [], removed: [4]});
+    w.verify({id: "9,0:3", position: -1, added: [], removed: [4]});
     w.finalize();
 });
 
@@ -244,7 +252,7 @@ test(module + "short collection", function(t) {
     var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
-    w.verify({id: "0-2", position: 0, added: [], removed: []});
+    w.verify({id: "0:2", position: 0, added: [], removed: []});
     w.finalize();
 });
 
@@ -252,7 +260,7 @@ test(module + "short collection offset", function(t) {
     var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5, offset: -1});
     var w = new Watch(t, collection);
-    w.verify({id: "2,0-1", position: 0, added: [], removed: []});
+    w.verify({id: "2,0:1", position: 0, added: [], removed: []});
     w.finalize();
 });
 
@@ -260,13 +268,13 @@ test(module + "short collection position", function(t) {
     var source = new Backbone.Collection(_(3).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
-    w.verify({id: "0-2", position: 0, added: [], removed: []});
+    w.verify({id: "0:2", position: 0, added: [], removed: []});
     collection.position=0.5;
     w.verify({id: [0, 1, 2, "clone_0"], position: 0.5, added: ["clone_0"], removed: []});
     collection.position=0.9;
     w.verify({id: [0, 1, 2, "clone_0"], position: 0.9, added: [], removed: []});
     collection.position=1;
-    w.verify({id: "1-2,0", position: 1, added: [], removed: ["clone_0"]});
+    w.verify({id: "1:2,0", position: 1, added: [], removed: ["clone_0"]});
     w.finalize();
 });
 
@@ -274,13 +282,13 @@ test(module + "remove less than 'count'", function(t) {
     var source = new Backbone.Collection(_(5).times(function(n) {return {"id": n}; }));
     var collection = new CollectionViewProxy(source, {count: 5});
     var w = new Watch(t, collection);
-    w.verify({id: "0-4", positoin: 0, added: [], removed: []});
+    w.verify({id: "0:4", positoin: 0, added: [], removed: []});
     source.pop();
-    w.verify({id: "0-3", position: 0, added: [], removed: [4]});
+    w.verify({id: "0:3", position: 0, added: [], removed: [4]});
     source.pop();
-    w.verify({id: "0-2", position: 0, added: [], removed: [3]});
+    w.verify({id: "0:2", position: 0, added: [], removed: [3]});
     source.pop();
-    w.verify({id: "0-1", position: 0, added: [], removed: [2]});
+    w.verify({id: "0:1", position: 0, added: [], removed: [2]});
     source.pop();
     w.verify({id: "0", position: 0, added: [], removed: [1]});
     source.pop();
@@ -349,22 +357,26 @@ test(module + "remove less than 'count'", function(t) {
 	var source = new TestCollection();
 	var collection = new CollectionViewProxy(source, {count: 5});
 	var w = new Watch(t, collection);
-	source.fetch({data: {start: 0, count: 5}}).then(function() {
-		w.verify({id: "0-4", position: 0, added: "0-4", removed: []});
+	Promise.resolve(source.fetch({data: {start: 0, count: 5}}))
+	.then(function() {
+		throw new Error("Hello");
+		w.verify({id: "0:4", position: 0, added: "0:4", removed: []});
 		source.pop();
-		w.verify({id: "0-3", position: 0, added: [], removed: [4]});
+		w.verify({id: "0:3", position: 0, added: [], removed: [4]});
 		source.pop();
-		w.verify({id: "0-2", position: 0, added: [], removed: [3]});
+		w.verify({id: "0:2", position: 0, added: [], removed: [3]});
 		source.pop();
-		w.verify({id: "0-1", position: 0, added: [], removed: [2]});
+		w.verify({id: "0:1", position: 0, added: [], removed: [2]});
 		source.pop();
 		w.verify({id: "0", position: 0, added: [], removed: [1]});
 		source.pop();
 		w.verify({id: [], position: 0, added: [], removed: [0]});
+	})
+	.then(function() {
 		w.finalize();
-	},
-	function() {
-		console.log("Error reading source");
+	},function(error) {
+		console.log("Error reading source:  " + error);
+		w.finalize();
 	});
 });
 
@@ -373,11 +385,11 @@ var module="PagedCollection : "
 var TestPagedCollection = PagedCollection.extend({
 	url: '/pagedData',
 	parse: function(response, options) {
-		this.serverDataLength=response.count;
+		this.serverTotal=response.count;
 		return response.data;
 	},
-	getServerDataLength: function() {
-		return this.serverDataLength;
+	getServerTotal: function() {
+		return this.serverTotal;
 	}
 });
 
@@ -393,9 +405,13 @@ test(module + "Initial fetch", function(t) {
 	var collection = new TestPagedCollection({pagesize: 5});
 	var w=new Watch(t, collection);
 	collection.position=0;
-	collection.current.then(function() {
-		w.verify({id: "95-99,0-9", added: "95-99,0-9", removed: []});
+	Promise.resolve(collection.current)
+	.then(function() {
+		w.verify({id: "95:99,0:9", added: "95:99,0:9", removed: []});
 		w.finalize();		
+	},function(error) {
+		t.fail(error);
+		w.finalize();
 	});
 });
 
@@ -403,27 +419,32 @@ test(module + "Increasing position", function(t) {
 	var collection = new TestPagedCollection({pagesize: 5});
 	var w=new Watch(t, collection);
 	collection.position=0;
-	collection.current.then(function() {
-		w.verify({id: "95-99,0-9", added: "95-99,0-9", removed: []});
+	Promise.resolve(collection.current)
+	.then(function() {
+		w.verify({id: "95:99,0:9", added: "95:99,0:9", removed: []});
 
 		collection.position=1;
 		t.ok(collection.current==undefined);
 		w.verify({position: 1, added: [], removed: []});
 
 		collection.position=5;
-		collection.current.then(function() {
-			w.verify({position: 5, added: "10-14", removed: "95-99"});
+		return collection.current;
+	})
+	.then(function() {
+		w.verify({position: 5, added: "10:14", removed: "95:99"});
 
-			collection.position=8;
-			t.ok(!collection.current);
+		collection.position=8;
+		t.ok(!collection.current);
 
-			collection.position=10;
-			collection.current.then(function() {
-				w.verify({position: 10, added: "15-19", removed: "0-4"});
-
-				w.finalize();		
-			});
-		});
+		collection.position=10;
+		return collection.current;
+	})
+	.then(function() {
+		w.verify({position: 10, added: "15:19", removed: "0:4"});
+		w.finalize();		
+	},function(error) {
+		t.fail(error);
+		w.finalize();
 	});
 });
 
@@ -431,23 +452,60 @@ test(module + "Decreasing position", function(t) {
 	var collection = new TestPagedCollection({pagesize: 5});
 	var w=new Watch(t, collection);
 	collection.position=0;
-	collection.current.then(function() {
-		w.verify({id: "95-99,0-9", added: "95-99,0-9", removed: []});
+	Promise.resolve(collection.current)
+	.then(function() {
+		w.verify({id: "95:99,0:9", added: "95:99,0:9", removed: []});
 
 		collection.position=-1;
-		collection.current.then(function() {
-			w.verify({position: -1, added: "90-94", removed: "5-9"});
+		return collection.current;
+	})
+	.then(function() {
+		w.verify({position: -1, added: "90:94", removed: "5:9"});
 
-			collection.position=-4;
-			t.ok(!collection.current);
+		collection.position=-4;
+		t.ok(!collection.current);
 
-			collection.position=-7;
-			collection.current.then(function() {
-				w.verify({position: -7, added: "85-89", removed: "0-4"});
+		collection.position=-7;
+		return collection.current;
+	})
+	.then(function() {
+		w.verify({position: -7, added: "85:89", removed: "0:4"});
+		w.finalize();		
+	}, function(error) {
+		t.fail(error);
+		w.finalize();
+	});
+});
 
-				w.finalize();		
-			});
-		});
+test(module + "at", function(t) {
+	var collection = new TestPagedCollection({pagesize: 5});
+	var w=new Watch(t, collection);
+	collection.position=0;
+	Promise.resolve(collection.current)
+	.then(function() {
+		w.verify({at: {index: "-5:9", id: "95:99,0:9"}});
+		t.ok(collection.at(0).id===0);
+
+		collection.position=1;
+		t.equal(collection.current, undefined);
+		w.verify({at: {index: "-5:9", id: "95:99,0:9"}});
+//		w.verify({at: {index: "95:99,0:9", id: "95:99,0:9"}})
+		//Move to the next page
+		collection.position=5;
+		return collection.current;
+	})
+	.then(function() {
+		w.verify({at: {index: "0:14", id: "0:14"}});
+
+		collection.position=10;
+		return collection.current;
+	})
+	.then(function() {
+		w.verify({at: {index: "5:19", id: "5:19"}});
+		w.finalize();
+	}, function(error) {
+		t.fail("Error: " + error);
+		w.finalize();
 	});
 });
 
@@ -460,12 +518,13 @@ test(module + "Bootstrap", function(t) {
 	collection.position=0;
 	// Should collection proxy through to the current XHR request?
 	// Then this could read collection.getXHR().when(...) ??
-	paged.current.then(function() {
-		cw.verify({ position: 0, id: "0-4" });
+	Promise.resolve(paged.current)
+	.then(function() {
+		cw.verify({ position: 0, id: "0:4" });
 
 		collection.position=1;
-		// This should triggre a fetch of the next window of data
-		// paged.current.then(fundction() {
+		// This should trigger a fetch of the next window of data
+		// paged.current.then(function() {
 		// 	cw.verify({
 		// 		positoin: 1, added: [5], removed: [0]
 		// 	});

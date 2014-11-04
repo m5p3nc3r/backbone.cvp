@@ -120,8 +120,8 @@ var CollectionViewProxy = Backbone.Collection.extend({
 		return this.collection.at(actualIndex);
 	},
 	normalize: function(x) {
-		x=x%this.collection.length;
-		if(x<0) x+=this.collection.length;
+		x=x%this.total;
+		if(x<0) x+=this.total;
 		return x;
 	},
 });
