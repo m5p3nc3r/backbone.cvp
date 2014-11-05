@@ -150,10 +150,10 @@ $(document).ready( function() {
 		var preventDefault=true;
 		switch(event.keyCode) {
 			case 37: // Left
-				c.collection.at(2).view.controller.prev();
+				c.collection.models[2].view.controller.prev();
 				break;
 			case 39: // Right
-				c.collection.at(2).view.controller.next();
+				c.collection.models[2].view.controller.next();
 				break;
 			case 38: // Up
 				c.prev();
