@@ -10,7 +10,7 @@ A quick example can be found [here](http://m5p3nc3r.github.io/backbone.cvp/examp
 
 An example of a 2D grid can be found [here](http://m5p3nc3r.github.io/backbone.cvp/examples/grid.html).
 
-An example of an infinite list can be found [here](http://m5p3nc3r.github.io/backbone.cvp//examples/simpleinf.html]).
+An example of an infinite list can be found [here](http://m5p3nc3r.github.io/backbone.cvp//examples/simpleinf.html).
 
 The test cases are run using Prova, please download the sources and run 'prova tests/test.js' and follow the unstructions.  I try to make sure that these tests all pass before a commit - but currently this is a 'just for fun' project, so I'm making no promises!
 
