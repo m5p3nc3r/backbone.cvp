@@ -29,8 +29,9 @@ server.respondWith(/\/pagedData(.)*/, function(xhr, id) {
     var args=getURLArgs(xhr.url);
    	var count=args.count;
 	var number=args.start;
+	var max=1000;
 	var response = {
-		count: 100,
+		count: max,
 		data: []
 	};
 	var normalize=function(number, max) {
@@ -39,7 +40,7 @@ server.respondWith(/\/pagedData(.)*/, function(xhr, id) {
 		return number;
 	}
 	while(count--) {
-		response.data.push({id: normalize(number,100)});
+		response.data.push({id: normalize(number,max)});
 		number++;
 	}
 	xhr.respond(200, {'Content-Type': 'application-json'}, JSON.stringify(response));
