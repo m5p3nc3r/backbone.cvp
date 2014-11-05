@@ -27,7 +27,7 @@ var PagedCollection = Backbone.Collection.extend({
 		var fetch=this.requireFetch(position);
 		this._position = position;
 
-		if(fetch) this.current=this.fetch();
+		if(fetch) this.current=this.fetch({add: true, remove: true});
 	},
 
 	generateRange: function(position) {
@@ -69,8 +69,9 @@ var PagedCollection = Backbone.Collection.extend({
 
 	// Override the 'at' function because we only have a subset of the complete data set
 	at: function(index) {
-//		index=index%this.total;
 		var i=index-this.range.start;
+		i=i%this.getServerTotal();
+		if(i<0) i+=this.getServerTotal();
 		return this.models[i];
 	},
 });

@@ -459,7 +459,7 @@ test(module + "Decreasing position", function(t) {
 		return collection.current;
 	})
 	.then(function() {
-		w.verify({position: -1, added: "90:94", removed: "5:9"});
+		w.verify({position: -1, added: "90:94", removed: "5:9", id: "90:99,0:4"});
 
 		collection.position=-4;
 		t.ok(!collection.current);
@@ -488,7 +488,7 @@ test(module + "at", function(t) {
 		collection.position=1;
 		t.equal(collection.current, undefined);
 		w.verify({at: {index: "-5:9", id: "95:99,0:9"}});
-//		w.verify({at: {index: "95:99,0:9", id: "95:99,0:9"}})
+		w.verify({at: {index: "95:99,0:9", id: "95:99,0:9"}})
 		//Move to the next page
 		collection.position=5;
 		return collection.current;
@@ -521,14 +521,31 @@ test(module + "Bootstrap", function(t) {
 	.then(function() {
 		cw.verify({ position: 0, id: "0:4" });
 
-		collection.position=1;
-		// This should trigger a fetch of the next window of data
-		// paged.current.then(function() {
-		// 	cw.verify({
-		// 		positoin: 1, added: [5], removed: [0]
-		// 	});
-		// });
-
+		cw.finalize();
+	}, function(error) {
+		console.log("Error: " + error);
 		cw.finalize();
 	});
+});
+
+test(module + "Decreasing position", function(t) {
+	var paged = new TestPagedCollection({pagesize: 5});
+	var collection = new CollectionViewProxy(paged, {count: 5});
+	var cw=new Watch(t, collection);
+	collection.position=0;
+	Promise.resolve(paged.current)
+	.then(function() {
+		cw.verify({position: 0, id: "0:4"});
+		collection.position = -1;
+		return paged.current;
+	})
+	.then(function() {
+		cw.verify({position: -1, id: "99,0:3"});
+		cw.finalize();
+
+		collection.position = -2;
+		cw.verify({id: "98:99,0:2"});
+	}, function(error) {
+		cw.finalize();
+	})
 });

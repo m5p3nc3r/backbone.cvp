@@ -17,25 +17,28 @@ gulp.task('lint', function() {
 
 function rebundle(b, dstFolder, dstFile) {
     console.log("Rebundling " + dstFolder + "/" + dstFile);
-    b.bundle()
+    b.bundle().on('error', function(err) {
+        console.log("Error: " + err);
+        this.end();
+    })
     .pipe(source(dstFile))
     .pipe(gulp.dest(dstFolder));
 };
 
 function watch(src, dstFolder, dstFile, needWatch) {
     var b=browserify({
-	cache: {},
-	packageCache: {},
-	fullPaths: true,
-	debug: !argv.production
+	   cache: {},
+	   packageCache: {},
+	   fullPaths: true,
+	   debug: !argv.production
     });
     b.add(src);
     rebundle(b, dstFolder, dstFile);
     if(needWatch) {
-	var w=watchify(b);
-	w.on('update', function() {
-	    rebundle(w, dstFolder, dstFile);
-	});
+	   var w=watchify(b);
+	   w.on('update', function() {
+	       rebundle(w, dstFolder, dstFile);
+	   });
     }
 }
 
@@ -43,6 +46,7 @@ var bundles=[
     { src: './tests/test.js', dstFolder: 'tests/gen', dstFile: 'testsbundle.js' },
     { src: './examples/simple.js', dstFolder: './examples/gen', dstFile: 'simplebundle.js' },
     { src: './examples/grid.js', dstFolder: './examples/gen', dstFile: 'gridbundle.js' },
+    { src: './examples/simpleinf.js', dstFolder: './examples/gen', dstFile: 'simpleinf.js'},
 ];
 
 gulp.task('watchify', function() {
@@ -57,6 +61,10 @@ gulp.task('browserify', function() {
 	var bundle=bundles[index];
 	watch(bundle.src, bundle.dstFolder, bundle.dstFile, false);
     }
+});
+
+gulp.task('prova', function() {
+
 });
 
 gulp.task('watch', ['watchify']);

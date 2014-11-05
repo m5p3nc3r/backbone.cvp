@@ -45,9 +45,10 @@ var CollectionViewProxy = Backbone.Collection.extend({
 		// but need count+1 items (positoin%1!=0)
 		if(position%1!==0 && this.collection.length>this.options.count) count+=1;
 		while(count) {
-			models.push(this.collection.at(pos));
+			var model=this.collection.at(pos);
+			if(model) models.push(this.collection.at(pos));
 			pos++;
-			if(pos>=this.collection.length) pos=0;
+			if(pos>=this.total) pos=0;
 			count--;
 		}
 
