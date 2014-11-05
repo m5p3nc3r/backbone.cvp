@@ -32,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="collectionviewproxy" class="anchor" href="#collectionviewproxy"><span class="octicon octicon-link"></span></a>CollectionViewProxy</h1>
+<a id="collectionviewproxy" class="anchor" href="#collectionviewproxy" aria-hidden="true"><span class="octicon octicon-link"></span></a>CollectionViewProxy</h1>
 
 <p>This code is an attempt to solve the problem of the infinite scrolling list by proxying a Backbone.Collection.</p>
 
@@ -42,9 +42,16 @@
 
 <p>A quick example can be found <a href="http://m5p3nc3r.github.io/backbone.cvp/examples/simple.html">here</a>.  But please note that even though the business logic should work on IE, for simplicity the layout of the example has only been tested on Chrome and Firefox.</p>
 
-<p>A example of a 2D grid can be found <a href="http://m5p3nc3r.github.io/backbone.cvp/examples/grid.html">here</a>.</p>
+<p>An example of a 2D grid can be found <a href="http://m5p3nc3r.github.io/backbone.cvp/examples/grid.html">here</a>.</p>
 
-<p>There is also a qunit test suite <a href="http://m5p3nc3r.github.io/backbone.cvp/tests">here</a>.  I try to make sure that these tests all pass before a commit - but currently this is a 'just for fun' project, so I'm making no promises!</p>
+<p>An example of an infinite list can be found <a href="http://m5p3nc3r.github.io/backbone.cvp//examples/simpleinf.html%5D">here</a>.</p>
+
+<p>The test cases are run using Prova, please download the sources and run 'prova tests/test.js' and follow the unstructions.  I try to make sure that these tests all pass before a commit - but currently this is a 'just for fun' project, so I'm making no promises!</p>
+
+<h1>
+<a id="browser-compatibility" class="anchor" href="#browser-compatibility" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser compatibility</h1>
+
+<p>The core business logic of the code should work on any browser, but I should note that the examples all use un-prefixed css for translation, so it may not work in your browser.  The browsers that have been tested are Chrome and Firefox, it does not currently work on Safari of IE - I may fix this, but it is not a priority of the project for now.</p>
 
 <p>More documentation and examples to come soon.</p>
       </section>
