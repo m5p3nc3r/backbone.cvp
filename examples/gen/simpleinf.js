@@ -119,7 +119,7 @@ var Controller = function() {
 $(document).ready( function() {
 	var c=new Controller();
 });
-},{"../js/animate":"C:\\Users\\matspe01\\projects\\htmltoys\\js\\animate.js","../js/collectionviewproxy":"C:\\Users\\matspe01\\projects\\htmltoys\\js\\collectionviewproxy.js","../js/easing":"C:\\Users\\matspe01\\projects\\htmltoys\\js\\easing.js","../js/pagedcollection":"C:\\Users\\matspe01\\projects\\htmltoys\\js\\pagedcollection.js","../js/touch":"C:\\Users\\matspe01\\projects\\htmltoys\\js\\touch.js","./listview":"C:\\Users\\matspe01\\projects\\htmltoys\\examples\\listview.js","backbone":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","jquery":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\jquery\\dist\\jquery.js","sinon":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon.js","underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\examples\\listview.js":[function(require,module,exports){
+},{"../js/animate":"c:\\Users\\matspe01\\projects\\htmltoys\\js\\animate.js","../js/collectionviewproxy":"c:\\Users\\matspe01\\projects\\htmltoys\\js\\collectionviewproxy.js","../js/easing":"c:\\Users\\matspe01\\projects\\htmltoys\\js\\easing.js","../js/pagedcollection":"c:\\Users\\matspe01\\projects\\htmltoys\\js\\pagedcollection.js","../js/touch":"c:\\Users\\matspe01\\projects\\htmltoys\\js\\touch.js","./listview":"c:\\Users\\matspe01\\projects\\htmltoys\\examples\\listview.js","backbone":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","jquery":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\jquery\\dist\\jquery.js","sinon":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon.js","underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\examples\\listview.js":[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var Cache = require('../js/cache');
@@ -240,7 +240,7 @@ var ListView = Backbone.View.extend({
 
 module.exports = ListView;
 
-},{"../js/cache":"C:\\Users\\matspe01\\projects\\htmltoys\\js\\cache.js","backbone":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\js\\animate.js":[function(require,module,exports){
+},{"../js/cache":"c:\\Users\\matspe01\\projects\\htmltoys\\js\\cache.js","backbone":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\js\\animate.js":[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore');
@@ -299,7 +299,7 @@ Animate.prototype.running = function() {
 
 module.exports = Animate;
 
-},{"underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\js\\cache.js":[function(require,module,exports){
+},{"underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\js\\cache.js":[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore');
@@ -332,7 +332,7 @@ Cache.prototype.pop = function() {
 
 module.exports = Cache;
 
-},{"underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\js\\collectionviewproxy.js":[function(require,module,exports){
+},{"underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\js\\collectionviewproxy.js":[function(require,module,exports){
 "use strict";
 
 var Backbone = require('backbone');
@@ -490,7 +490,7 @@ Object.defineProperty(CollectionViewProxy.prototype, "total", {
 
 module.exports = CollectionViewProxy;
 
-},{"./pagedcollection":"C:\\Users\\matspe01\\projects\\htmltoys\\js\\pagedcollection.js","backbone":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\js\\easing.js":[function(require,module,exports){
+},{"./pagedcollection":"c:\\Users\\matspe01\\projects\\htmltoys\\js\\pagedcollection.js","backbone":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\js\\easing.js":[function(require,module,exports){
 "use strict";
 
 var Easing = {
@@ -511,7 +511,7 @@ var Easing = {
 
 module.exports = Easing;
 
-},{}],"C:\\Users\\matspe01\\projects\\htmltoys\\js\\pagedcollection.js":[function(require,module,exports){
+},{}],"c:\\Users\\matspe01\\projects\\htmltoys\\js\\pagedcollection.js":[function(require,module,exports){
 "use strict";
 
 var Backbone = require('backbone');
@@ -602,7 +602,7 @@ Object.defineProperty(PagedCollection.prototype, "total", {
 
 module.exports = PagedCollection;
 
-},{"backbone":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\js\\touch.js":[function(require,module,exports){
+},{"backbone":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js","underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\js\\touch.js":[function(require,module,exports){
 "use strict";
 
 var _ = require('underscore');
@@ -664,7 +664,7 @@ var onTouchEnd = function(event) {
 
 module.exports = Touch;
 
-},{"underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js":[function(require,module,exports){
+},{"underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\backbone\\backbone.js":[function(require,module,exports){
 //     Backbone.js 1.1.0
 
 //     (c) 2010-2011 Jeremy Ashkenas, DocumentCloud Inc.
@@ -2247,7 +2247,7 @@ module.exports = Touch;
 
 }).call(this);
 
-},{"underscore":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\inherits\\inherits_browser.js":[function(require,module,exports){
+},{"underscore":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\inherits\\inherits_browser.js":[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2272,7 +2272,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\process\\browser.js":[function(require,module,exports){
+},{}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\process\\browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2360,14 +2360,14 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\support\\isBufferBrowser.js":[function(require,module,exports){
+},{}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\support\\isBufferBrowser.js":[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\util.js":[function(require,module,exports){
+},{}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\util.js":[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -2957,7 +2957,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\support\\isBufferBrowser.js","_process":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\process\\browser.js","inherits":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\inherits\\inherits_browser.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\jquery\\dist\\jquery.js":[function(require,module,exports){
+},{"./support/isBuffer":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\support\\isBufferBrowser.js","_process":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\process\\browser.js","inherits":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\inherits\\inherits_browser.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\jquery\\dist\\jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -12149,7 +12149,7 @@ return jQuery;
 
 }));
 
-},{}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon.js":[function(require,module,exports){
+},{}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon.js":[function(require,module,exports){
 /**
  * Sinon core utilities. For internal use only.
  *
@@ -12197,7 +12197,7 @@ var sinon = (function () {
     return sinon;
 }());
 
-},{"./sinon/assert":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\assert.js","./sinon/behavior":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\behavior.js","./sinon/call":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js","./sinon/collection":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\collection.js","./sinon/extend":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\extend.js","./sinon/format":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\format.js","./sinon/log_error":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\log_error.js","./sinon/match":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./sinon/mock":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\mock.js","./sinon/sandbox":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\sandbox.js","./sinon/spy":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./sinon/stub":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\stub.js","./sinon/test":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test.js","./sinon/test_case":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test_case.js","./sinon/times_in_words":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\times_in_words.js","./sinon/typeOf":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\typeOf.js","./sinon/util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\assert.js":[function(require,module,exports){
+},{"./sinon/assert":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\assert.js","./sinon/behavior":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\behavior.js","./sinon/call":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js","./sinon/collection":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\collection.js","./sinon/extend":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\extend.js","./sinon/format":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\format.js","./sinon/log_error":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\log_error.js","./sinon/match":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./sinon/mock":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\mock.js","./sinon/sandbox":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\sandbox.js","./sinon/spy":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./sinon/stub":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\stub.js","./sinon/test":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test.js","./sinon/test_case":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test_case.js","./sinon/times_in_words":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\times_in_words.js","./sinon/typeOf":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\typeOf.js","./sinon/util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\assert.js":[function(require,module,exports){
 (function (global){
 /**
  * @depend times_in_words.js
@@ -12409,7 +12409,7 @@ var sinon = (function () {
 }(typeof sinon == "object" && sinon || null, typeof window != "undefined" ? window : (typeof self != "undefined") ? self : global));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./match":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\behavior.js":[function(require,module,exports){
+},{"./match":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\behavior.js":[function(require,module,exports){
 (function (process){
 /**
  * @depend util/core.js
@@ -12749,7 +12749,7 @@ var sinon = (function () {
 }(typeof sinon == "object" && sinon || null));
 
 }).call(this,require('_process'))
-},{"./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","_process":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\process\\browser.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js":[function(require,module,exports){
+},{"./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","_process":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\process\\browser.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js":[function(require,module,exports){
 /**
   * @depend util/core.js
   * @depend match.js
@@ -12961,7 +12961,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./match":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\collection.js":[function(require,module,exports){
+},{"./match":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\collection.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend stub.js
@@ -13129,7 +13129,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./mock":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\mock.js","./spy":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./stub":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\stub.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\extend.js":[function(require,module,exports){
+},{"./mock":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\mock.js","./spy":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./stub":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\stub.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\extend.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -13234,7 +13234,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\format.js":[function(require,module,exports){
+},{"./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\format.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -13324,7 +13324,7 @@ var sinon = (function () {
     (typeof formatio == "object" && formatio)
 ));
 
-},{"./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","formatio":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\lib\\formatio.js","util":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\util.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\log_error.js":[function(require,module,exports){
+},{"./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","formatio":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\lib\\formatio.js","util":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\browserify\\node_modules\\util\\util.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\log_error.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -13394,7 +13394,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js":[function(require,module,exports){
+},{"./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend typeOf.js
@@ -13649,7 +13649,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\mock.js":[function(require,module,exports){
+},{"./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\mock.js":[function(require,module,exports){
 /**
  * @depend times_in_words.js
  * @depend util/core.js
@@ -14099,7 +14099,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./call":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js","./match":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./spy":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\sandbox.js":[function(require,module,exports){
+},{"./call":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js","./match":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\match.js","./spy":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\sandbox.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend extend.js
@@ -14262,7 +14262,7 @@ var sinon = (function () {
     }
 }());
 
-},{"./collection":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\collection.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","./util/fake_server":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_server.js","./util/fake_timers":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_timers.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js":[function(require,module,exports){
+},{"./collection":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\collection.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","./util/fake_server":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_server.js","./util/fake_timers":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_timers.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js":[function(require,module,exports){
 /**
   * @depend times_in_words.js
   * @depend util/core.js
@@ -14700,7 +14700,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./call":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\stub.js":[function(require,module,exports){
+},{"./call":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\call.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\stub.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend extend.js
@@ -14867,7 +14867,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./behavior":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\behavior.js","./spy":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test.js":[function(require,module,exports){
+},{"./behavior":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\behavior.js","./spy":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\spy.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend stub.js
@@ -14975,7 +14975,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./sandbox":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\sandbox.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test_case.js":[function(require,module,exports){
+},{"./sandbox":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\sandbox.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test_case.js":[function(require,module,exports){
 /**
  * @depend util/core.js
  * @depend test.js
@@ -15080,7 +15080,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./test":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test.js","./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\times_in_words.js":[function(require,module,exports){
+},{"./test":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\test.js","./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\times_in_words.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -15125,7 +15125,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{"./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\typeOf.js":[function(require,module,exports){
+},{"./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\typeOf.js":[function(require,module,exports){
 /**
  * @depend ../sinon.js
  */
@@ -15177,7 +15177,7 @@ var sinon = (function () {
     (typeof formatio == "object" && formatio)
 ));
 
-},{"./util/core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js":[function(require,module,exports){
+},{"./util/core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js":[function(require,module,exports){
 /**
  * @depend ../../sinon.js
  */
@@ -15489,7 +15489,7 @@ var sinon = (function () {
     }
 }(typeof sinon == "object" && sinon || null));
 
-},{}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\event.js":[function(require,module,exports){
+},{}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\event.js":[function(require,module,exports){
 /**
  * Minimal Event interface implementation
  *
@@ -15601,7 +15601,7 @@ if (typeof sinon == "undefined") {
     }
 }());
 
-},{"./core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_server.js":[function(require,module,exports){
+},{"./core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_server.js":[function(require,module,exports){
 /**
  * @depend fake_xml_http_request.js
  * @depend ../format.js
@@ -15834,7 +15834,7 @@ if (typeof sinon == "undefined") {
     }
 }());
 
-},{"./core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","./fake_xml_http_request":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_xml_http_request.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_timers.js":[function(require,module,exports){
+},{"./core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","./fake_xml_http_request":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_xml_http_request.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_timers.js":[function(require,module,exports){
 (function (global){
 /**
  * Fake timer API
@@ -16258,7 +16258,7 @@ if (typeof sinon == "undefined") {
 }(typeof global != "undefined" && typeof global !== "function" ? global : this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_xml_http_request.js":[function(require,module,exports){
+},{"./core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\fake_xml_http_request.js":[function(require,module,exports){
 /**
  * @depend core.js
  * @depend ../extend.js
@@ -16870,7 +16870,7 @@ if (typeof sinon == "undefined") {
 
 })(typeof self !== "undefined" ? self : this);
 
-},{"./core":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","./event":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\event.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\lib\\formatio.js":[function(require,module,exports){
+},{"./core":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\core.js","./event":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\lib\\sinon\\util\\event.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\lib\\formatio.js":[function(require,module,exports){
 (function (global){
 ((typeof define === "function" && define.amd && function (m) {
     define("formatio", ["samsam"], m);
@@ -17087,7 +17087,7 @@ if (typeof sinon == "undefined") {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"samsam":"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\node_modules\\samsam\\lib\\samsam.js"}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\node_modules\\samsam\\lib\\samsam.js":[function(require,module,exports){
+},{"samsam":"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\node_modules\\samsam\\lib\\samsam.js"}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\sinon\\node_modules\\formatio\\node_modules\\samsam\\lib\\samsam.js":[function(require,module,exports){
 ((typeof define === "function" && define.amd && function (m) { define("samsam", m); }) ||
  (typeof module === "object" &&
       function (m) { module.exports = m(); }) || // Node
@@ -17473,7 +17473,7 @@ if (typeof sinon == "undefined") {
     };
 });
 
-},{}],"C:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js":[function(require,module,exports){
+},{}],"c:\\Users\\matspe01\\projects\\htmltoys\\node_modules\\underscore\\underscore.js":[function(require,module,exports){
 //     Underscore.js 1.5.2
 //     http://underscorejs.org
 //     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
