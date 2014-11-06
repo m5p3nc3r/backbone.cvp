@@ -116,7 +116,7 @@ var Cache = require('../js/cache');
 			target: view,
 			onStart: function(t) {
 				animate.stop();
-				var item=view.collection.at(0).view.$el;
+				var item=view.collection.models[0].view.$el;
 				t.itemSize=config.horizontal ? item.outerWidth() : item.outerHeight();
 			},
 			onMove: function(t) {

@@ -30,7 +30,7 @@ var Controller = function() {
 		target: view,
 		onStart: function(t) {
 			animate.stop();
-			t.itemWidth=view.collection.at(0).view.$el.outerWidth();
+			t.itemWidth=view.collection.models[0].view.$el.outerWidth();
 		},
 		onMove: function(t) {
 			collection.position -= (t.delta.x/t.itemWidth);
