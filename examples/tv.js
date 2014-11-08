@@ -120,7 +120,7 @@ var ListView = Backbone.View.extend({
 		});
 	},
 	highlight: function(index) {
-		var model=this.collection.at(this.highlightedIndex)
+		var model=this.collection.at(this.highlightedIndex);
 		if(model && model.view) model.view.highlight(false);
 		model=this.collection.at(index);
 		if(model && model.view) model.view.highlight(true);

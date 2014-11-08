@@ -1,4 +1,7 @@
 {
 	"devel": true,
-    "browserify": true
+    "browserify": true,
+    "globals": {
+    	"Promise": true
+    }
 }
