@@ -9,8 +9,7 @@ var source = require('vinyl-source-stream');
 gulp.task('lint', function() {
     return gulp.src(['**/*.js',
 		     '!node_modules/**/*',
-		     '!**/gen/*',
-		     '!js/libs/**/*'])
+		     '!**/gen/*'])
 	.pipe(jshint())
 	.pipe(jshint.reporter('default'));
 });
@@ -23,7 +22,7 @@ function rebundle(b, dstFolder, dstFile) {
     })
     .pipe(source(dstFile))
     .pipe(gulp.dest(dstFolder));
-};
+}
 
 function watch(src, dstFolder, dstFile, needWatch) {
     var b=browserify({
@@ -43,10 +42,10 @@ function watch(src, dstFolder, dstFile, needWatch) {
 }
 
 var bundles=[
-    { src: './tests/test.js', dstFolder: 'tests/gen', dstFile: 'testsbundle.js' },
     { src: './examples/simple.js', dstFolder: './examples/gen', dstFile: 'simplebundle.js' },
     { src: './examples/grid.js', dstFolder: './examples/gen', dstFile: 'gridbundle.js' },
     { src: './examples/simpleinf.js', dstFolder: './examples/gen', dstFile: 'simpleinf.js'},
+    { src: './examples/tv.js', dstFolder: './examples/gen', dstFile: 'tv.js'},
 ];
 
 gulp.task('watchify', function() {
@@ -61,10 +60,6 @@ gulp.task('browserify', function() {
 	var bundle=bundles[index];
 	watch(bundle.src, bundle.dstFolder, bundle.dstFile, false);
     }
-});
-
-gulp.task('prova', function() {
-
 });
 
 gulp.task('watch', ['watchify']);

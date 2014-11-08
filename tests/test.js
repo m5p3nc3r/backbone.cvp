@@ -25,7 +25,7 @@ var range=function(str) {
 		}
 	});
 	return ret;
-}
+};
 
 var Watch=function(test, collection) {
     var added=[];
@@ -308,7 +308,7 @@ var getURLArgs=function(uri) {
 	});
     }
     return ret;
-}
+};
 
 var server = sinon.fakeServer.create();
 // Process requests to the /data endpoint (simple, no paging)
@@ -334,7 +334,7 @@ server.respondWith(/\/pagedData(.)*/, function(xhr, id) {
 		number=number%max;
 		if(number<0) number+=max;
 		return number;
-	}
+	};
 	while(count--) {
 		response.data.push({id: normalize(number,100)});
 		number++;
@@ -379,7 +379,7 @@ test(module + "remove less than 'count'", function(t) {
 	});
 });
 
-var module="PagedCollection : "
+var module="PagedCollection : ";
 
 var TestPagedCollection = PagedCollection.extend({
 	url: '/pagedData',
@@ -423,7 +423,7 @@ test(module + "Increasing position", function(t) {
 		w.verify({id: "95:99,0:9", added: "95:99,0:9", removed: []});
 
 		collection.position=1;
-		t.ok(collection.current==undefined);
+		t.ok(collection.current===undefined);
 		w.verify({position: 1, added: [], removed: []});
 
 		collection.position=5;
@@ -488,7 +488,7 @@ test(module + "at", function(t) {
 		collection.position=1;
 		t.equal(collection.current, undefined);
 		w.verify({at: {index: "-5:9", id: "95:99,0:9"}});
-		w.verify({at: {index: "95:99,0:9", id: "95:99,0:9"}})
+		w.verify({at: {index: "95:99,0:9", id: "95:99,0:9"}});
 		//Move to the next page
 		collection.position=5;
 		return collection.current;
@@ -547,5 +547,5 @@ test(module + "Decreasing position", function(t) {
 		cw.verify({id: "98:99,0:2"});
 	}, function(error) {
 		cw.finalize();
-	})
+	});
 });

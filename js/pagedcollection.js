@@ -5,8 +5,8 @@ var _ = require('underscore');
 
 var DefaultOptions = {
 	pagesize: 5,
-	generateArgs: function(start, count) { return {start: start, count: count}},
-}
+	generateArgs: function(start, count) { return {start: start, count: count}; },
+};
 
 var PagedCollection = Backbone.Collection.extend({
 	constructor: function(options){
@@ -36,7 +36,7 @@ var PagedCollection = Backbone.Collection.extend({
 		return {
 			low: low, high: low+this.options.pagesize,
 			start: low-this.options.pagesize, count: this.options.pagesize*3
-		}
+		};
 	},
 
 	sync: function(method, model, options) {
@@ -53,12 +53,12 @@ var PagedCollection = Backbone.Collection.extend({
 			that.current=undefined;
 			that.range=range;
 			if(success) success.apply(this, arguments);
-		}
+		};
 		var error=options.error;
 		options.error=function() {
 			that.current=undefined;
 			if(error) error.apply(this, arguments);
-		}
+		};
 
 		return Backbone.Collection.prototype.sync.call(this, method, model, options);
 	},
@@ -78,7 +78,7 @@ var PagedCollection = Backbone.Collection.extend({
 
 Object.defineProperty(PagedCollection.prototype, "position", {
 	get: function() { return this._position; },
-	set: function(v) { this.setPosition(v)}
+	set: function(v) { this.setPosition(v); }
 });
 
 Object.defineProperty(PagedCollection.prototype, "total", {

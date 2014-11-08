@@ -21,7 +21,7 @@ var getURLArgs=function(uri) {
 	});
     }
     return ret;
-}
+};
 
 var server = sinon.fakeServer.create();
 // Process data requests to the /pagedData endpoint
@@ -38,7 +38,7 @@ server.respondWith(/\/pagedData(.)*/, function(xhr, id) {
 		number=number%max;
 		if(number<0) number+=max;
 		return number;
-	}
+	};
 	while(count--) {
 		response.data.push({id: normalize(number,max)});
 		number++;
@@ -102,7 +102,7 @@ var Controller = function() {
 				animate.stop().start({from: collection.position, to: targetPosition+=1});
 				break;
 			case 38: // Up
-				source.add({id: source.length})
+				source.add({id: source.length});
 				break;
 			case 40: // Down
 				source.pop();
@@ -113,7 +113,7 @@ var Controller = function() {
 		}
 		if(preventDefault) event.preventDefault();
 	});
-}
+};
 
 $(document).ready( function() {
 	var c=new Controller();
